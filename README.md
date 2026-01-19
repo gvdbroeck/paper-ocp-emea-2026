@@ -1,13 +1,12 @@
 # OCP EMEA 2026 DC Protection Paper
 
-Academic paper on DC short-circuit protection methodology for the OCP EMEA Summit Future Technologies Symposium (April 2026).
+Paper on DC short-circuit protection methodology for the OCP EMEA Summit Future Technologies Symposium (April 2026).
 
 ## Conference Details
 
 - **Event**: OCP EMEA Summit 2026 - Future Technologies Symposium
-- **Submission Deadline**: February 9, 2026 (11:59 PM PT)
+- **Digest Submission Deadline**: February 9, 2026 (11:59 PM PT)
 - **Format**: 2-page IEEE two-column conference format
-- **Prize**: $10,000 for best paper
 
 ## Paper Topic
 
@@ -35,8 +34,8 @@ This repository is linked to an Overleaf project for LaTeX compilation. Changes 
 
 ## Collaboration
 
-- **Lead Author**: Giel Van den Broeck
-- **Co-Author**: ABB Researcher (TBD)
+- **Lead Author**: Giel Van den Broeck (DEP)
+- **Co-Authors**: Pavel Purgat (ABB), Dusan Brhlik (DEP), Antonello Antoniazzi (ABB)
 
 ## Files
 
@@ -54,7 +53,3 @@ bibtex main
 pdflatex main.tex
 pdflatex main.tex
 ```
-
-## License
-
-Academic paper - all rights reserved until publication.
