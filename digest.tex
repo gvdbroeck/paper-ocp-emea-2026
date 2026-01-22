@@ -37,11 +37,50 @@ DC microgrids, short-circuit protection, solid-state circuit breakers, data cent
 
 \section{Introduction}
 
-\subsection{Motivation}
+% §1: Industry Trend
+% - DC distribution emerging as key enabler for megawatt-scale racks in AI/HPC data centers
+% - Power densities pushing beyond 100 kW per rack toward MW-level compute infrastructure
+% - Battery storage integrated to buffer rapid power fluctuations — avoiding causing headache for grid operators
+% - Architectures at 400V and 800V with multi-source topologies for backup and fluctuations
+%
+% §2: Where Existing Standards Fall Short
+% - IEC 61660 (1997): calculation method for batteries, rectifiers, DC motors, capacitors
+% - Gap 1: DC/DC converters have no defined model — despite being central to modern DC systems
+% - Gap 2: No methodology to calculate voltage as function of time post-fault — critical for system uptime
+% - Standard designed for auxiliary systems, not megawatt-scale DC microgrids
+%
+% §3: The Gap — What Is Missing
+% - No methodology to perform short-circuit current calculations for complex DC systems with numerous converters, batteries, and charged capacitors
+% - Cannot prove by calculation that protection devices handle fault current levels
+% - Cannot verify protection acts fast enough to prevent voltage collapse
+% - Cannot verify selectivity of protection devices
+% - Essential for: sizing equipment, specifying protection devices, enabling inspection bodies to verify compliance
 
-\subsection{Technical Challenges}
+% §4: Technical Challenge
+% - DC fault behavior fundamentally differs from AC: exponential current rise, no natural zero crossing
+% - Each source type (battery, converter, capacitor) contributes with distinct transient characteristics
+% - Voltage collapse: limited energy in capacitors causes voltage to collapse within milliseconds — protection must act in sub-ms to single-digit ms range
+% - Availability: fast fault clearing essential for system uptime, preventing cascading failures
+% - Selectivity: protection scheme must isolate only the faulted section while maintaining power to unaffected loads
+% - Safety advantage: fast solid-state interruption significantly reduces arc flash hazards compared to AC systems
+%
+% §5: Need for Practical Accessibility
+% - Calculation method must be usable by installers, system designers, and inspection bodies
+% - Applicable in modern software packages without requiring expertise in differential equations
+% - Industry hesitates to adopt DC at scale due to safety concerns stemming from absence of established calculation methods and protection guidelines
 
-\subsection{Research Gap and Contribution}
+% §6: Contribution
+% - Systematic simulation-based methodology for DC short-circuit current calculations
+% - Enables specifying and selecting protection devices based on calculated peak current, rise time and I²t
+% - Validated approach for protection device sizing and withstand verification
+% - Applicable to complex multi-source DC topologies at megawatt scale
+% - Purpose: provide the essential stepping stone to prove protection adequacy by calculation
+%
+% §7: Paper Outline Preview
+% - Section II: Methodology — system modeling, fault scenarios, transient metrics, coordination strategy
+% - Section III: Case study — 800V DC datacenter architecture with laboratory validation
+% - Section IV: Discussion — design implications, technology readiness, standardization needs
+% - Section V: Conclusion — summary and call for standardization collaboration
 
 \section{Methodology}
 
