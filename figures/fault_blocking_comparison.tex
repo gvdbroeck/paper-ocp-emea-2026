@@ -1,0 +1,59 @@
+\documentclass[border=2mm]{standalone}
+
+\usepackage{graphicx}
+\usepackage{subcaption}
+
+\begin{document}
+	\begin{figure}
+		\centering
+		
+		\begin{subfigure}[b]{0.45\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{fault_blocking_converter.pdf}
+			\caption{Fault blocking converter}
+			\label{fig:fb_converter}
+		\end{subfigure}
+		\hfill
+		\begin{subfigure}[b]{0.45\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{non_fault_blocking_converter.pdf}
+			\caption{Non-fault blocking converter}
+			\label{fig:nfb_converter}
+		\end{subfigure}
+		
+		\vspace{1em}
+		
+		\begin{subfigure}[b]{0.45\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{fault_blocking_topology.pdf}
+			\caption{Fault blocking topology}
+			\label{fig:fb_topology}
+		\end{subfigure}
+		\hfill
+		\begin{subfigure}[b]{0.45\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{non_fault_blocking_topology.pdf}
+			\caption{Non-fault blocking topology}
+			\label{fig:nfb_topology}
+		\end{subfigure}
+		
+		\vspace{1em}
+		
+		\begin{subfigure}[b]{0.45\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{fault_blocking_current.pdf}
+			\caption{Fault blocking current}
+			\label{fig:fb_current}
+		\end{subfigure}
+		\hfill
+		\begin{subfigure}[b]{0.45\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{non_fault_blocking_current.pdf}
+			\caption{Non-fault blocking current}
+			\label{fig:nfb_current}
+		\end{subfigure}
+		
+		\caption{Comparison of fault blocking and non-fault blocking converters}
+		\label{fig:converter_comparison}
+	\end{figure}
+\end{document}
