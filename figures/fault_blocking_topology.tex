@@ -27,28 +27,28 @@
 	\begin{tikzpicture}
 		\ctikzset{tripoles/mos style/arrows}
 		
-		\draw (-0.5,0) to[C,l=$C_1$,*-*] (-0.5,2.9);
-		
-		\draw (-0.5,0) to[short,-o] +(-1,0) node[anchor=east] {$-$};
-		\draw (-0.5,2.9) to[short,-o] +(-1,0) node[anchor=east] {$+$};
-		
-		\draw (2,1.2) node[nigfete] (q1) {};
+		\draw (2,1.7) node[nigfete] (q1) {};
 		\draw (q1.G) node[anchor=south east] {$S_1$};	
 		\antipll{q1}
 		
-		\draw (2,-1.2) node[nigfete] (q2) {};
+		\draw (2,-1.7) node[nigfete] (q2) {};
 		\draw (q2.G) node[anchor=south east] {$S_2$};	
 		\antipll{q2}
 		
 		\draw (q1.S) to[short] (q2.D);
-		
-		\draw (-0.5,2.9) to[short] (2,2.9) to[short] (q1.D);
-		\draw (-0.5,0) to[short] (2,0) to[short] (q2.S);
-		
 		\draw ($(q1.S)!0.5!(q2.D)$) node (mid) {};
 		
-		\draw (mid) to[short,*-] +(0.8,0) to[L,l=$L$] +(2.8,0) to[short] +(3.2,0) node (outp) {};
-		\draw (q2.S) to[short] +(3.2,0) node (outn) {};
+		\draw (-0.5,-3.4) to[C,l=$C_1$,*-*] (-0.5,3.4);
+		
+		\draw (-0.5,-3.4) to[short,-o] +(-1,0) node[anchor=east] {$-$};
+		\draw (-0.5,3.4) to[short,-o] +(-1,0) node[anchor=east] {$+$};
+		
+		\draw (-0.5,3.4) to[short] (2,3.4) to[short] (q1.D);
+		\draw (-0.5,-3.4) to[short] (2,-3.4) to[short] (q2.S);
+		
+		\draw (mid) to[short,*-] +(0.8,0) to[L,l=$L$] +(2.8,0) node (Lout) {};
+		\draw (Lout) to[short] +(0.6,0) node (outp) {};
+		\draw (2,-3.4) to[short] (4.2,-3.4) node (outn) {};
 		
 		\draw (outp) to[C,l=$C_2$] (outn);
 		
@@ -58,7 +58,7 @@
 		\fault{($(outp)+(0.8,0)$)}{($(outn)+(0.8,0)$)}
 		
 		\draw[dashed,blue,line width=1pt,->,>=stealth] 
-			(-1.2,3.1) -- (2,3.1) -- (2.7,3.1) -- (2.7,0.2) -- (3,0.2) -- (5.2,0.2) -- (5.6,0.2) -- (5.6,-0.6) node[anchor=west,pos=0.5] {$i_{fault}$};
+			(-1.2,3.6) -- (2,3.6) -- (2.9,3.6) -- (2.9,0.2) -- (3.2,0.2) -- (4.8,0.2) -- (5.2,0.2) -- (5.2,-1.5) node[anchor=west,pos=0.5] {$i_{fault}$};
 		
 	\end{tikzpicture}
 \end{document}
