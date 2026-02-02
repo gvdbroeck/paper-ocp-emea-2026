@@ -1,0 +1,56 @@
+\documentclass[border=2mm]{standalone}
+
+\usepackage{tikz}
+\usepackage[american,smartlabels,fulldiodes,siunitx]{circuitikz}
+\usetikzlibrary{calc}
+\usetikzlibrary{shadows}
+\usetikzlibrary{arrows.meta}
+
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+
+\ctikzset{bipoles/thickness=1}
+\ctikzset{bipoles/length=0.8cm}
+\ctikzset{bipoles/diode/height=.375}
+\ctikzset{bipoles/diode/width=.3}
+\tikzstyle{every node}=[font=\small]
+\tikzstyle{every path}=[line width=0.8pt,line cap=round,line join=round]
+
+\newcommand{\fault}[2]{\draw[arrow,red] ($#1!0.4!#2$) to[short] +(0.05,0) -- ($#2+(-0.05,0)$);
+	\draw[red] ($#1!0.4!#2$) to[short] +(-0.05,0) to[short] #1;}
+
+\begin{document}
+	\begin{tikzpicture}
+		\tikzstyle{arrow} = [-{Stealth[length=1.2mm, width=1mm]}]
+		
+		\draw (-0.5,2) to[short] (0,2);
+		\draw (-0.5,0) to[short] (0,0);
+		
+		\draw (0,1) to[L] (1.5,1);
+		\draw (1.5,1) to[short] (2,1);
+		\draw (2,1) to[Tnigbt,n=S] (2,0);
+		\draw (2,0) to[short] (0,0);
+		
+		\draw (0,2) to[C] (0,1);
+		
+		\draw (2,1) to[short] (2.5,1);
+		\draw (2.5,1) to[D] (2.5,2);
+		\draw (2.5,2) to[short] (0,2);
+		
+		\draw (2.5,1) to[short] (3.5,1);
+		\draw (3.5,2) to[short] (2.5,2);
+		\draw (3.5,2) to[short] (4,2);
+		\draw (3.5,0) to[short] (2,0);
+		\draw (3.5,0) to[short] (4,0);
+		
+		\draw (3.5,1.5) to[C] (3.5,2);
+		\draw (3.5,0.5) to[short] (3.5,0);
+		\draw (3.5,0.5) to[short] (3.5,1.5);
+		
+		\fault{($(4,2)+(0.3,0)$)}{($(4,0)+(0.3,0)$)}
+		
+		\node[anchor=east] at (-0.5,2) {$+$};
+		\node[anchor=east] at (-0.5,0) {$-$};
+		
+	\end{tikzpicture}
+\end{document}
