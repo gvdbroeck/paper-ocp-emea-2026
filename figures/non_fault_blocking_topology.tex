@@ -23,34 +23,38 @@
 	\begin{tikzpicture}
 		\tikzstyle{arrow} = [-{Stealth[length=1.2mm, width=1mm]}]
 		
-		\draw (-0.5,2) to[short] (0,2);
-		\draw (-0.5,0) to[short] (0,0);
+		\coordinate (top) at (2,2);
+		\coordinate (mid) at (2,1);
+		\coordinate (bot) at (2,0);
 		
-		\draw (0,1) to[L] (1.5,1);
-		\draw (1.5,1) to[short] (2,1);
-		\draw (2,1) to[Tnigbt,n=S] (2,0);
-		\draw (2,0) to[short] (0,0);
+		\draw (top) to[Tnigbt,n=S1] (mid);
+		\draw (mid) to[Tnigbt,n=S2] (bot);
 		
-		\draw (0,2) to[C] (0,1);
+		\draw (2.5,2) to[D] (2.5,1);
+		\draw (2.5,1) to[D] (2.5,0);
+		\draw (top) to[short] (2.5,2);
+		\draw (mid) to[short] (2.5,1);
+		\draw (bot) to[short] (2.5,0);
 		
-		\draw (2,1) to[short] (2.5,1);
-		\draw (2.5,1) to[D] (2.5,2);
-		\draw (2.5,2) to[short] (0,2);
+		\draw (-1,1) to[L] (0.5,1);
+		\draw (0.5,1) to[short] (mid);
+		\draw (-1,0) to[short] (bot);
+		\draw (-1,0) to[C] (-1,1);
 		
-		\draw (2.5,1) to[short] (3.5,1);
-		\draw (3.5,2) to[short] (2.5,2);
-		\draw (3.5,2) to[short] (4,2);
-		\draw (3.5,0) to[short] (2,0);
-		\draw (3.5,0) to[short] (4,0);
+		\draw (top) to[short] (4,2);
+		\draw (bot) to[short] (4,0);
+		\draw (4,0) to[C] (4,2);
 		
-		\draw (3.5,1.5) to[C] (3.5,2);
-		\draw (3.5,0.5) to[short] (3.5,0);
-		\draw (3.5,0.5) to[short] (3.5,1.5);
+		\draw (4,2) to[short] (4.5,2);
+		\draw (4,0) to[short] (4.5,0);
 		
-		\fault{($(4,2)+(0.3,0)$)}{($(4,0)+(0.3,0)$)}
+		\fault{($(4.5,2)+(0.3,0)$)}{($(4.5,0)+(0.3,0)$)}
 		
-		\node[anchor=east] at (-0.5,2) {$+$};
-		\node[anchor=east] at (-0.5,0) {$-$};
+		\draw (-1.5,1) to[short] (-1,1);
+		\draw (-1.5,0) to[short] (-1,0);
+		
+		\node[anchor=east] at (-1.5,1) {$+$};
+		\node[anchor=east] at (-1.5,0) {$-$};
 		
 	\end{tikzpicture}
 \end{document}
