@@ -9,11 +9,11 @@
 \pgfplotsset{compat=1.8}
 
 \ctikzset{bipoles/thickness=1}
-\ctikzset{bipoles/length=0.8cm}
+\ctikzset{bipoles/length=1.2cm}
 \ctikzset{bipoles/diode/height=.375}
 \ctikzset{bipoles/diode/width=.3}
-\ctikzset{tripoles/thyristor/height=.8}
-\ctikzset{tripoles/thyristor/width=1}
+\ctikzset{tripoles/thyristor/height=1.2}
+\ctikzset{tripoles/thyristor/width=1.5}
 \tikzstyle{every node}=[font=\small]
 \tikzstyle{every path}=[line width=0.8pt,line cap=round,line join=round]
 
@@ -27,38 +27,37 @@
 	\begin{tikzpicture}
 		\ctikzset{tripoles/mos style/arrows}
 		
-		\draw (3,2.9) node[nigfete] (q1) {};
+		\draw (3,6) node[nigfete] (q1) {};
 		\draw (q1.G) node[anchor=south east] {$S_1$};	
 		\antipll{q1}
 		
-		\draw (3,1.2) node[nigfete] (q2) {};
+		\draw (3,2) node[nigfete] (q2) {};
 		\draw (q2.G) node[anchor=south east] {$S_2$};	
 		\antipll{q2}
 		
 		\draw (q1.S) to[short] (q2.D);
 		\draw ($(q1.S)!0.5!(q2.D)$) node (mid) {};
 		
-		\draw (-0.5,-0.5) to[C,l=$C_1$,*-*] (-0.5,4.6);
+		\draw (0,0) to[short,-o] +(-1,0) node[anchor=east] {$-$};
+		\draw (0,0) to[C,l=$C_1$,*-*] (0,4);
+		\draw (0,4) to[short,-o] +(-1,0) node[anchor=east] {$+$};
 		
-		\draw (-0.5,-0.5) to[short,-o] +(-1,0) node[anchor=east] {$-$};
-		\draw (-0.5,4.6) to[short,-o] +(-1,0) node[anchor=east] {$+$};
+		\draw (0,4) to[short] (3,4) to[short] (q1.D);
+		\draw (0,0) to[short] (3,0) to[short] (q2.S);
 		
-		\draw (-0.5,4.6) to[short] (3,4.6) to[short] (q1.D);
-		\draw (-0.5,-0.5) to[short] (3,-0.5) to[short] (q2.S);
+		\draw (mid) to[short,*-] (4,4) to[L,l=$L$] (6,4);
+		\draw (3,0) to[short] (7.5,0);
 		
-		\draw (mid) to[short,*-] (4,2.05) to[L,l=$L$] (6,2.05);
-		\draw (3,-0.5) to[short] (7.5,-0.5);
+		\draw (7.5,0) to[C,l=$C_2$,*-*] (7.5,4);
+		\draw (6,4) to[short,-*] (7.5,4);
 		
-		\draw (7.5,-0.5) to[C,l=$C_2$,*-*] (7.5,2.05);
-		\draw (6,2.05) to[short,-*] (7.5,2.05);
+		\draw (7.5,4) to[short,-o] +(0.6,0) node[anchor=west] {$+$};
+		\draw (7.5,0) to[short,-o] +(0.6,0) node[anchor=west] {$-$};
 		
-		\draw (7.5,2.05) to[short,-o] +(0.6,0) node[anchor=west] {$+$};
-		\draw (7.5,-0.5) to[short,-o] +(0.6,0) node[anchor=west] {$-$};
-		
-		\fault{($(7.5,2.05)+(0.8,0)$)}{($(7.5,-0.5)+(0.8,0)$)}
+		\fault{($(7.5,4)+(0.8,0)$)}{($(7.5,0)+(0.8,0)$)}
 		
 		\draw[dashed,blue,line width=1pt,->,>=stealth] 
-			(-0.3,4.6) -- (3,4.6) -- (3.7,4.6) -- (3.7,2.25) -- (6,2.25) -- (8.3,2.25) -- (8.3,0.8) node[anchor=west,pos=0.5] {$i_{fault}$};
+			(0.2,4) -- (3,4) -- (3.7,4) -- (3.7,4.2) -- (6,4.2) -- (8.3,4.2) -- (8.3,2.5) node[anchor=west,pos=0.5] {$i_{fault}$};
 		
 	\end{tikzpicture}
 \end{document}
