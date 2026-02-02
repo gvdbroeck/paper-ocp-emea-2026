@@ -1,0 +1,37 @@
+\documentclass[border=2mm,class=extreport,12pt]{standalone}
+
+\usepackage{tikz}
+\usetikzlibrary{arrows}
+
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.8}
+\pgfplotsset{width=7cm,height=6cm}
+
+\pgfplotsset{every mark/.append style={solid}}
+
+\tikzstyle{every node}=[font=\small]
+
+\begin{document}
+	\begin{tikzpicture}
+	\begin{axis}
+	[%
+	xlabel={Time~[ms]},
+	ylabel={Current~[A]},
+	xmin=0,xmax=10,
+	ymin=0,ymax=120,
+	xtick={0,2,4,6,8,10},
+	ytick={0,20,40,60,80,100,120},
+	minor tick num=1,
+	grid=both,
+	clip=true,
+	]%
+	
+	\addplot[line width=2pt,blue,mark=none,domain=0:2,samples=100]
+	{100*exp(-x/0.5)};
+	
+	\addplot[line width=2pt,blue,mark=none,domain=2:10,samples=100]
+	{80};
+	
+	\end{axis}
+	\end{tikzpicture}
+\end{document}
