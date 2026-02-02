@@ -17,7 +17,7 @@
 \tikzstyle{every path}=[line width=0.8pt,line cap=round,line join=round]
 
 \newcommand{\Ddist}{0.35}
-\newcommand{\antipll}[1]{\draw ($(#1.S) + (0,0.15)$) to[short] ($(#1.S) + (\Ddist,0.15)$) to[D] ($(#1.D) + (\Ddist,-0.15)$) to[short] ($(#1.D) + (0,-0.15)$);}
+\newcommand{\antipll}[1]{\draw ($(#1.S) + (0,-0.1)$) to[short] ($(#1.S) + (\Ddist,0.15)$) to[D] ($(#1.D) + (\Ddist,-0.15)$) to[short] ($(#1.D) + (0,0)$);}
 
 \newcommand{\fault}[2]{\draw[arrow,red] ($#1!0.4!#2$) to[short] +(0.05,0) -- ($#2+(-0.05,0)$);
 	\draw[red] ($#1!0.4!#2$) to[short] +(-0.05,0) to[short] #1;}
