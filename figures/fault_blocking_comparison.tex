@@ -1,59 +1,197 @@
 \documentclass[border=2mm]{standalone}
 
-\usepackage{graphicx}
-\usepackage{subcaption}
+\usepackage{tikz}
+\usepackage[american,smartlabels,fulldiodes,siunitx]{circuitikz}
+\usetikzlibrary{calc}
+\usetikzlibrary{shadows}
+\usetikzlibrary{arrows}
+\usetikzlibrary{arrows.meta}
+
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.8}
+
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+
+\ctikzset{bipoles/thickness=1}
+\ctikzset{bipoles/length=1.2cm}
+\ctikzset{bipoles/diode/height=.375}
+\ctikzset{bipoles/diode/width=.3}
+\ctikzset{tripoles/thyristor/height=1.2}
+\ctikzset{tripoles/thyristor/width=1.5}
+\tikzstyle{every node}=[font=\small]
+\tikzstyle{every path}=[line width=0.8pt,line cap=round,line join=round]
+
+\newcommand{\Ddist}{0.5}
+\newcommand{\antipll}[1]{\draw ($(#1.S) + (0,0.2)$) to[short] ($(#1.S) + (\Ddist,0.2)$) to[D] ($(#1.D) + (\Ddist,-0.2)$) to[short] ($(#1.D) + (0,-0.2)$);}
+
+\newcommand{\dcdc}[2]{
+	\node at ($#1+(-0.3,0.15)$) (#2_in1) {};
+	\node at ($#1+(-0.3,-0.15)$) (#2_in2) {};
+	\node at ($#1+(0.3,0.15)$) (#2_out1) {};
+	\node at ($#1+(0.3,-0.15)$) (#2_out2) {};
+	\draw[fill=white,drop shadow] ($#1+(-0.3,-0.3)$) rectangle ($#1+(0.3,0.3)$);
+	\draw ($#1+(-0.3,-0.3)$) -- ($#1+(0.3,0.3)$);
+	\node[anchor=northwest] at ($#1+(0.11,0.2)$) () {\tiny\sffamily DC};
+	\node[anchor=southeast] at ($#1+(0.41,-0.2)$) () {\tiny\sffamily DC};
+}
+
+\newcommand{\fault}[2]{\draw[-{Stealth[length=1.2mm, width=1mm]},red] ($#1!0.4!#2$) to[short] +(0.05,0) -- ($#2+(-0.05,0)$);
+	\draw[red] ($#1!0.4!#2$) to[short] +(-0.05,0) to[short] #1;}
+
+\pgfplotsset{every mark/.append style={solid}}
 
 \begin{document}
-	\begin{figure}
-		\centering
+	\begin{tikzpicture}
 		
-		\begin{subfigure}[b]{0.45\textwidth}
-			\centering
-			\includegraphics[width=\textwidth]{fault_blocking_converter.pdf}
-			\caption{Fault blocking converter}
-			\label{fig:fb_converter}
-		\end{subfigure}
-		\hfill
-		\begin{subfigure}[b]{0.45\textwidth}
-			\centering
-			\includegraphics[width=\textwidth]{non_fault_blocking_converter.pdf}
-			\caption{Non-fault blocking converter}
-			\label{fig:nfb_converter}
-		\end{subfigure}
+		% Column headers
+		\node[font=\large\bfseries] at (3,17) {Fault Blocking};
+		\node[font=\large\bfseries] at (11.5,17) {Non-Fault Blocking};
 		
-		\vspace{1em}
+		% Row 1: Block diagrams
+		\begin{scope}[shift={(3,14)}]
+			\node at (0,0) (conv) {};
+			\dcdc{(conv)}{C};
+			\draw (C_in1.base) to[short] +(-0.5,0);
+			\draw (C_in2.base) to[short] +(-0.5,0);
+			\draw (C_out1.base) to[short] +(0.5,0);
+			\draw (C_out2.base) to[short] +(0.5,0);
+			\fault{($(C)+(0.8,0.15)$)}{($(C)+(0.8,-0.15)$)}
+			\node[anchor=south] at (0,0.7) {\sffamily\textbf{CONTROL}};
+			\draw[-{Stealth[length=2mm, width=1.5mm]},line width=1pt] (-0.3,0.6) -- (0.3,0.6);
+		\end{scope}
 		
-		\begin{subfigure}[b]{0.45\textwidth}
-			\centering
-			\includegraphics[width=\textwidth]{fault_blocking_topology.pdf}
-			\caption{Fault blocking topology}
-			\label{fig:fb_topology}
-		\end{subfigure}
-		\hfill
-		\begin{subfigure}[b]{0.45\textwidth}
-			\centering
-			\includegraphics[width=\textwidth]{non_fault_blocking_topology.pdf}
-			\caption{Non-fault blocking topology}
-			\label{fig:nfb_topology}
-		\end{subfigure}
+		\begin{scope}[shift={(11.5,14)}]
+			\node at (0,0) (conv) {};
+			\dcdc{(conv)}{C};
+			\draw (C_in1.base) to[short] +(-0.5,0);
+			\draw (C_in2.base) to[short] +(-0.5,0);
+			\draw (C_out1.base) to[short] +(0.5,0);
+			\draw (C_out2.base) to[short] +(0.5,0);
+			\fault{($(C)+(0.8,0.15)$)}{($(C)+(0.8,-0.15)$)}
+			\node[anchor=south] at (0,0.7) {\sffamily\textbf{NO CONTROL}};
+			\draw[-{Stealth[length=2mm, width=1.5mm]},line width=1pt] (-0.3,0.6) -- (0.3,0.6);
+		\end{scope}
 		
-		\vspace{1em}
+		% Row 2: Topology diagrams
+		\begin{scope}[shift={(0,4)}]
+			\ctikzset{tripoles/mos style/arrows}
+			
+			\draw (3,6) node[nigfete] (q1) {};
+			\draw (q1.G) node[anchor=south east] {$S_1$};	
+			\antipll{q1}
+			
+			\draw (3,2) node[nigfete] (q2) {};
+			\draw (q2.G) node[anchor=south east] {$S_2$};	
+			\antipll{q2}
+			
+			\draw (q1.S) to[short] (q2.D);
+			
+			\draw (0,0) to[short,-o] +(-1,0) node[anchor=east] {$-$};
+			\draw (0,0) to[C,l=$C_1$,*-*] (0,4);
+			\draw (0,4) to[short,-o] +(-1,0) node[anchor=east] {$+$};
+			
+			\draw (0,4) to[L,l_=$L$,-*] (3,4);
+			
+			\draw (0,0) to[short] (3,0) to[short] (q2.S);
+			
+			\draw (q1.D) to[short] (3,8) to[short] (5.5,8);
+			\draw (q2.S) to[short] (3,0) to[short] (5.5,0);
+			
+			\draw (5.5,0) to[C,l=$C_2$,*-*] (5.5,8);
+			
+			\draw (5.5,8) to[short,-o] +(0.6,0) node[anchor=west] {$+$};
+			\draw (5.5,0) to[short,-o] +(0.6,0) node[anchor=west] {$-$};
+			
+			\fault{($(5.5,8)+(0.8,0)$)}{($(5.5,0)+(0.8,0)$)}
+			
+			\draw[dashed,blue,line width=1pt,->,>=stealth] 
+				(0,4.5) -- (3.25,4.5) -- (3.25,5.25) -- (4,5.25) -- (4,6.75) -- (3.25,6.75) -- (3.25,7.75) -- (5,7.75) node[anchor=north west,pos=0.5] {$i_{f}$};
+		\end{scope}
 		
-		\begin{subfigure}[b]{0.45\textwidth}
-			\centering
-			\includegraphics[width=\textwidth]{fault_blocking_current.pdf}
-			\caption{Fault blocking current}
-			\label{fig:fb_current}
-		\end{subfigure}
-		\hfill
-		\begin{subfigure}[b]{0.45\textwidth}
-			\centering
-			\includegraphics[width=\textwidth]{non_fault_blocking_current.pdf}
-			\caption{Non-fault blocking current}
-			\label{fig:nfb_current}
-		\end{subfigure}
+		\begin{scope}[shift={(8.5,4)}]
+			\ctikzset{tripoles/mos style/arrows}
+			
+			\draw (3,6) node[nigfete] (q1) {};
+			\draw (q1.G) node[anchor=south east] {$S_1$};	
+			\antipll{q1}
+			
+			\draw (3,2) node[nigfete] (q2) {};
+			\draw (q2.G) node[anchor=south east] {$S_2$};	
+			\antipll{q2}
+			
+			\draw (q1.S) to[short] (q2.D);
+			\draw ($(q1.S)!0.5!(q2.D)$) node (mid) {};
+			
+			\draw (0,0) to[short,-o] +(-1,0) node[anchor=east] {$-$};
+			\draw (0,0) to[C,l=$C_1$,*-*] (0,8);
+			\draw (0,8) to[short,-o] +(-1,0) node[anchor=east] {$+$};
+			
+			\draw (0,8) to[short] (3,8) to[short] (q1.D);
+			\draw (0,0) to[short] (3,0) to[short] (q2.S);
+			
+			\draw (3,4) to[L,l=$L$,*-] (6,4);
+			\draw (3,0) to[short] (6,0);
+			
+			\draw (6,0) to[C,l=$C_2$,*-*] (6,4);
+			\draw (6,4) to[short,-*] (6,4);
+			
+			\draw (6,4) to[short,-o] +(0.6,0) node[anchor=west] {$+$};
+			\draw (6,0) to[short,-o] +(0.6,0) node[anchor=west] {$-$};
+			
+			\fault{($(6,4)+(0.8,0)$)}{($(6,0)+(0.8,0)$)}
+			
+			\draw[dashed,blue,line width=1pt,->,>=stealth] 
+				(0.2,7.75) -- (2.75,7.75) -- (2.75,7) -- (1.25,7) -- (1.25,5) -- (2.75,5) -- (2.75,3.75) -- (5.75,3.75) node[anchor=north,pos=1.0] {$i_{f}$};
+		\end{scope}
 		
-		\caption{Comparison of fault blocking and non-fault blocking converters}
-		\label{fig:converter_comparison}
-	\end{figure}
+		% Row 3: Current vs time graphs
+		\begin{scope}[shift={(-0.5,-6)}]
+			\begin{axis}
+			[%
+			xlabel={Time~[ms]},
+			ylabel={Current~[A]},
+			xmin=0,xmax=10,
+			ymin=0,ymax=120,
+			xtick={0,2,4,6,8,10},
+			ytick={0,20,40,60,80,100,120},
+			minor tick num=1,
+			grid=both,
+			clip=true,
+			width=7cm,
+			height=6cm,
+			]%
+			
+			\addplot[line width=2pt,blue,mark=none,domain=0:10,samples=200]
+			{100*exp(-x/0.5)};
+			
+			\end{axis}
+		\end{scope}
+		
+		\begin{scope}[shift={(8,-6)}]
+			\begin{axis}
+			[%
+			xlabel={Time~[ms]},
+			ylabel={Current~[A]},
+			xmin=0,xmax=10,
+			ymin=0,ymax=120,
+			xtick={0,2,4,6,8,10},
+			ytick={0,20,40,60,80,100,120},
+			minor tick num=1,
+			grid=both,
+			clip=true,
+			width=7cm,
+			height=6cm,
+			]%
+			
+			\addplot[line width=2pt,blue,mark=none,domain=0:2,samples=100]
+			{100*exp(-x/0.5)};
+			
+			\addplot[line width=2pt,blue,mark=none,domain=2:10,samples=100]
+			{80};
+			
+			\end{axis}
+		\end{scope}
+		
+	\end{tikzpicture}
 \end{document}
