@@ -10,20 +10,20 @@
 	\begin{tikzpicture}
 		
 		% Column headers
-		\node[font=\large\bfseries] at (3.5,17) {Fault Blocking};
-		\node[font=\large\bfseries] at (11.5,17) {Non-Fault Blocking};
+		\node[font=\Large\bfseries,anchor=south] at (0.6,14) {\underline{FAULT BLOCKING}};
+		\node[font=\Large\bfseries,anchor=south] at (7.6,14) {\underline{NOT FAULT-BLOCKING}};
 		
 		% Row 1: Block diagrams with control labels
-		\node[inner sep=0pt] at (3.5,14.5) {\includegraphics[width=3cm]{fault_blocking_converter.pdf}};
-		\node[inner sep=0pt] at (11.5,14.5) {\includegraphics[width=3cm]{non_fault_blocking_converter.pdf}};
+		\node[inner sep=0pt,anchor=south] at (0.6,10.5) {\includegraphics[height=3cm]{fault_blocking_converter.pdf}};
+		\node[inner sep=0pt,anchor=south] at (7.6,10.5) {\includegraphics[height=3cm]{non_fault_blocking_converter.pdf}};
 		
 		% Row 2: Topology diagrams showing internal converter structure
-		\node[inner sep=0pt] at (3.5,8.5) {\includegraphics[width=6cm]{fault_blocking_topology.pdf}};
-		\node[inner sep=0pt] at (11.5,8.5) {\includegraphics[width=6cm]{non_fault_blocking_topology.pdf}};
+		\node[inner sep=0pt,anchor=south] at (0.6,5.5) {\includegraphics[width=5cm]{fault_blocking_topology.pdf}};
+		\node[inner sep=0pt,anchor=south] at (7.6,5.5) {\includegraphics[width=5cm]{non_fault_blocking_topology.pdf}};
 		
 		% Row 3: Current vs time graphs
-		\node[inner sep=0pt] at (3.5,2) {\includegraphics[width=7cm]{fault_blocking_current.pdf}};
-		\node[inner sep=0pt] at (11.5,2) {\includegraphics[width=7cm]{non_fault_blocking_current.pdf}};
+		\node[inner sep=0pt,anchor=south] at (0,0) {\includegraphics[width=7cm]{fault_blocking_current.pdf}};
+		\node[inner sep=0pt,anchor=south] at (7,0) {\includegraphics[width=7cm]{non_fault_blocking_current.pdf}};
 		
 	\end{tikzpicture}
 \end{document}
