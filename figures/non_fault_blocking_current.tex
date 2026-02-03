@@ -30,10 +30,10 @@
 	\addplot[line width=2pt,blue,mark=none] table[x expr=\thisrow{time_s}*1000,y=port0_current,col sep=comma] {fault_battery_converter_load_data_non_fault_blocking.csv};
 	
 	\draw[red,dashed,line width=1.5pt] (axis cs:1,0) -- (axis cs:1,6000);
-	\node[red,anchor=south west] at (axis cs:1.05,5400) {Fault};
+	\node[red,anchor=east] at (axis cs:1.0,5400) {Fault};
 	
 	\draw[blue!60!black,dashed,line width=1pt] (axis cs:1.08,0) -- (axis cs:1.08,3000);
-	\node[blue!60!black,anchor=south,font=\footnotesize] at (axis cs:1.08,3100) {Diode conduction};
+	\node[blue!60!black,anchor=south west,font=\footnotesize] at (axis cs:1.06,3100) {Diode conducts};
 	
 	\end{axis}
 	\end{tikzpicture}
