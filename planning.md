@@ -22,7 +22,9 @@
 
 ## Proposed Paper Title
 
-**"A Systematic Methodology for DC Short-Circuit Protection Evaluation in High-Power Data Center Microgrids"**
+**"Scalable Approach to Designing Protection for Gigawatt-scale DC Data Centers"**
+
+*(Updated per Antonello's suggestion on Jan 28)*
 
 ---
 
