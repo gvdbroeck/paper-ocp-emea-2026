@@ -48,10 +48,10 @@ DC microgrids, short-circuit protection, solid-state circuit breakers, data cent
 
 \textbf{§2: Where Existing Standards Fall Short}
 \begin{itemize}
-    \item IEC 61660 (1997): calculation method for batteries, rectifiers, DC motors, capacitors
+    \item IEC 61660 (1997): calculation method for batteries, rectifiers, DC motors, capacitors~\cite{iec61660}
     \item Gap 1: DC/DC converters have no defined model — despite being central to modern DC systems
     \item Gap 2: No methodology to calculate voltage as function of time post-fault — critical for system uptime
-    \item Standard designed for auxiliary systems, not megawatt-scale DC microgrids
+    \item Standard designed for auxiliary systems, not megawatt-scale DC microgrids~\cite{nvidia_800vdc}
 \end{itemize}
 
 \textbf{§3: The Gap — What Is Missing}
@@ -65,12 +65,12 @@ DC microgrids, short-circuit protection, solid-state circuit breakers, data cent
 
 \textbf{§4: Technical Challenge}
 \begin{itemize}
-    \item DC fault behavior fundamentally differs from AC: exponential current rise, no natural zero crossing
-    \item Each source type (battery, converter, capacitor) contributes with distinct transient characteristics
+    \item DC fault behavior fundamentally differs from AC: exponential current rise, no natural zero crossing~\cite{ravyts_fuse}
+    \item Each source type (battery, converter, capacitor) contributes with distinct transient characteristics~\cite{converter_fault_blocking}
     \item Voltage collapse: limited energy in capacitors causes voltage to collapse within milliseconds — protection must act in sub-ms to single-digit ms range
     \item Availability: fast fault clearing essential for system uptime, preventing cascading failures
-    \item Selectivity: protection scheme must isolate only the faulted section while maintaining power to unaffected loads
-    \item Safety advantage: fast solid-state interruption significantly reduces arc flash hazards compared to AC systems
+    \item Selectivity: protection scheme must isolate only the faulted section while maintaining power to unaffected loads~\cite{cairoli_sscb_review}
+    \item Safety advantage: fast solid-state interruption significantly reduces arc flash hazards compared to AC systems~\cite{arc_flash_dc}
 \end{itemize}
 
 \textbf{§5: Need for Practical Accessibility}
@@ -83,7 +83,7 @@ DC microgrids, short-circuit protection, solid-state circuit breakers, data cent
 \textbf{§6: Contribution}
 \begin{itemize}
     \item Systematic simulation-based methodology for DC short-circuit current calculations
-    \item Enables specifying and selecting protection devices based on calculated peak current, rise time and $I^2t$
+    \item Enables specifying and selecting protection devices based on calculated peak current, rise time and $I^2t$~\cite{cairoli_shipboard}
     \item Validated approach for protection device sizing and withstand verification
     \item Applicable to complex multi-source DC topologies at megawatt scale
     \item Purpose: provide the essential stepping stone to prove protection adequacy by calculation
