@@ -8,6 +8,8 @@
 \usepackage{textcomp}
 \usepackage{xcolor}
 \usepackage{hyperref}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning}
 
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
@@ -38,64 +40,16 @@ DC microgrids, short-circuit protection, solid-state circuit breakers, data cent
 
 \section{Introduction}
 
-\textbf{§1: Industry Trend}
-\begin{itemize}
-    \item DC distribution emerging as key enabler for megawatt-scale racks in AI/HPC data centers
-    \item Power densities pushing beyond 100 kW per rack toward MW-level compute infrastructure
-    \item Battery storage integrated to buffer rapid power fluctuations — avoiding causing headache for grid operators
-    \item Architectures at 400V and 800V with multi-source topologies for backup and fluctuations
-\end{itemize}
+ DC distribution is emerging as a key enabler for the next generation of AI/HPC data centers. Power densities are moving beyond 100~kW per rack toward megawatt-scale compute blocks, motivating architectures at 400~V and 800~V with multiple sources (utility converters, battery storage, and local capacitances) to manage fast load transients and provide redundancy. In these systems, fault clearing must be fast enough to avoid widespread voltage collapse and downtime, while remaining selective to isolate only the faulted section.
 
-\textbf{§2: Where Existing Standards Fall Short}
-\begin{itemize}
-    \item IEC 61660 (1997): calculation method for batteries, rectifiers, DC motors, capacitors~\cite{iec61660}
-    \item Gap 1: DC/DC converters have no defined model — despite being central to modern DC systems
-    \item Gap 2: No methodology to calculate voltage as function of time post-fault — critical for system uptime
-    \item Standard designed for auxiliary systems, not megawatt-scale DC microgrids~\cite{nvidia_800vdc}
-\end{itemize}
+ Unlike AC networks, DC faults exhibit a rapid, non-oscillatory current rise and have no natural current zero crossing, complicating interruption and coordination~\cite{ravyts_fuse,cairoli_sscb_review}. Moreover, each source class contributes with distinct transient characteristics (e.g., capacitor discharge, battery internal impedance response, converter current limiting and fault-blocking behavior) that strongly shape both the peak current and the post-fault voltage trajectory~\cite{converter_fault_blocking}. These dynamics are central for assessing equipment withstand (peak current and $I^2t$) and for verifying that protection operates quickly enough to preserve service continuity.
 
-\textbf{§3: The Gap — What Is Missing}
-\begin{itemize}
-    \item No methodology to perform short-circuit current calculations for complex DC systems with numerous converters, batteries, and charged capacitors
-    \item Cannot prove by calculation that protection devices handle fault current levels
-    \item Cannot verify protection acts fast enough to prevent voltage collapse
-    \item Cannot verify selectivity of protection devices
-    \item Essential for: sizing equipment, specifying protection devices, enabling inspection bodies to verify compliance
-\end{itemize}
+ Existing standard practice does not yet provide a scalable calculation method for such multi-source, converter-dominated DC microgrids. IEC~61660 offers guidance for auxiliary DC installations and selected source types, but does not cover modern DC/DC converter behavior or time-varying bus voltages following a fault~\cite{iec61660,nvidia_800vdc}. As a result, designers cannot reliably demonstrate by calculation that:
+ (i) protection devices can interrupt the prospective fault current,
+ (ii) the cleared-fault voltage stays above ride-through limits, and
+ (iii) the protection system remains selective.
 
-\textbf{§4: Technical Challenge}
-\begin{itemize}
-    \item DC fault behavior fundamentally differs from AC: exponential current rise, no natural zero crossing~\cite{ravyts_fuse}
-    \item Each source type (battery, converter, capacitor) contributes with distinct transient characteristics~\cite{converter_fault_blocking}
-    \item Voltage collapse: limited energy in capacitors causes voltage to collapse within milliseconds — protection must act in sub-ms to single-digit ms range
-    \item Availability: fast fault clearing essential for system uptime, preventing cascading failures
-    \item Selectivity: protection scheme must isolate only the faulted section while maintaining power to unaffected loads~\cite{cairoli_sscb_review}
-    \item Safety advantage: fast solid-state interruption significantly reduces arc flash hazards compared to AC systems~\cite{arc_flash_dc}
-\end{itemize}
-
-\textbf{§5: Need for Practical Accessibility}
-\begin{itemize}
-    \item Calculation method must be usable by installers, system designers, and inspection bodies
-    \item Applicable in modern software packages without requiring expertise in differential equations
-    \item Industry hesitates to adopt DC at scale due to safety concerns stemming from absence of established calculation methods and protection guidelines
-\end{itemize}
-
-\textbf{§6: Contribution}
-\begin{itemize}
-    \item Systematic simulation-based methodology for DC short-circuit current calculations
-    \item Enables specifying and selecting protection devices based on calculated peak current, rise time and $I^2t$~\cite{cairoli_shipboard}
-    \item Validated approach for protection device sizing and withstand verification
-    \item Applicable to complex multi-source DC topologies at megawatt scale
-    \item Purpose: provide the essential stepping stone to prove protection adequacy by calculation
-\end{itemize}
-
-\textbf{§7: Paper Outline Preview}
-\begin{itemize}
-    \item Section II: Methodology — system modeling, fault scenarios, transient metrics, coordination strategy
-    \item Section III: Case study — 800V DC datacenter architecture with laboratory validation
-    \item Section IV: Discussion — design implications, technology readiness, standardization needs
-    \item Section V: Conclusion — summary and call for collaboration to BUILD
-\end{itemize}
+ This digest proposes a practical, simulation-based methodology for DC short-circuit protection evaluation that can be applied with standard engineering inputs, without requiring differential-equation expertise. The methodology computes transient fault metrics (peak current, rise time, $I^2t$, and voltage recovery) and maps these to device selection and coordination checks, enabling inspection bodies and system designers to assess protection adequacy in complex DC architectures.
 
 \begin{figure}[t]
     \centering
@@ -108,32 +62,16 @@ DC microgrids, short-circuit protection, solid-state circuit breakers, data cent
 
 \begin{figure}[t]
     \centering
-    \framebox[\linewidth]{\rule{0pt}{4cm}\centering \textbf{Placeholder: Methodology Flowchart}}
-    \caption{Overview of the proposed simulation-based protection evaluation methodology, integrating component modeling, fault scenario generation, and coordination analysis.}
+    \input{figures/methodology_flowchart}
+    \caption{Flow of the proposed protection evaluation methodology: model assembly, fault scenario definition, transient simulation, extraction of protection-relevant metrics, and coordination checks.}
     \label{fig:methodology}
 \end{figure}
 
-\subsection{System Modeling Framework}
-
-\subsubsection{Component-Level Models}
-
-\subsubsection{Fault Scenario Generation}
-
-\subsection{Transient Simulation Approach}
-
-\subsubsection{Source Contribution Analysis}
-
-\subsection{Protection Coordination Strategy}
-
-\subsubsection{Selectivity Analysis}
-
-\subsubsection{Device Selection Criteria}
-
-\subsection{Validation Framework}
+ The workflow in Fig.~\ref{fig:methodology} structures protection evaluation around engineering questions that map directly to device requirements. Starting from a system description (topology, source characteristics, and cable data), a set of credible fault locations and fault types is generated. Time-domain simulation is used to compute prospective fault current and voltage trajectories for each scenario. From these waveforms, the method extracts peak current, rise time, and $I^2t$ to verify interruption capability, as well as voltage drop and recovery metrics to assess load ride-through. A coordination step then checks selectivity across protection zones by comparing device operating times and energy let-through margins.
 
 \section{Case Study: 800V DC Datacenter Architecture}
 
-\subsection{System Architecture}
+ We demonstrate the methodology on an 800~V DC subsystem representative of redundant, multi-source data center architectures (Fig.~\ref{fig:system_architecture}). Fault scenarios are evaluated at representative buses and feeders to quantify both the prospective fault current and the resulting bus voltage dynamics.
 
 \subsection{Simulation Results}
 
@@ -144,23 +82,21 @@ DC microgrids, short-circuit protection, solid-state circuit breakers, data cent
     \label{fig:simulation_results}
 \end{figure}
 
-\subsubsection{Fault Current Analysis}
-
-\subsubsection{Protection Device Evaluation}
-
-\subsection{Laboratory Validation}
-
 \subsection{Key Findings}
+
+\begin{itemize}
+    \item Prospective fault current and $I^2t$ differ significantly between locations due to the mix of capacitor discharge, battery contribution, and converter current limiting/fault blocking.
+    \item Voltage collapse and recovery metrics provide a direct link between protection operating time and service continuity, complementing peak-current checks.
+    \item A zone-based coordination check can be evaluated systematically across scenarios to verify selectivity and backup protection assumptions.
+\end{itemize}
 
 \section{Discussion}
 
-\subsection{Implications for Data Center Design}
-
-\subsection{Technology Readiness}
-
-\subsection{Standardization Needs}
+ The proposed workflow supports repeatable protection studies for converter-dominated DC architectures and provides a basis for defining standardized reporting (fault metrics, coordination margins, and voltage ride-through criteria). Solid-state interruption technologies can reduce energy let-through and improve selectivity, but require consistent, system-level evaluation methods to translate component ratings into deployment-ready protection schemes.
 
 \section{Conclusion}
+
+ This digest motivates the need for scalable DC short-circuit protection evaluation in emerging 400~V and 800~V data center microgrids and outlines a simulation-based workflow to compute protection-relevant transient metrics and perform coordination checks. Over the next 2--5 years, the key step for broader adoption will be convergence toward shared engineering practice: standardized converter fault models, comparable reporting of peak/$I^2t$/voltage metrics, and test protocols that connect system simulations to protection device performance. Future work will extend the workflow toward automated scenario coverage, parameter sensitivity for uncertain source behavior, and integration with digital design environments to accelerate protection studies during architecture exploration.
 
 \section*{Acknowledgment}
 
