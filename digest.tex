@@ -60,12 +60,12 @@ DC microgrids, short-circuit protection, solid-state circuit breakers, data cent
 
 \section{Methodology}
 
-\begin{figure}[t]
-    \centering
-    \input{figures/methodology_flowchart}
-    \caption{Flow of the proposed protection evaluation methodology: model assembly, fault scenario definition, transient simulation, extraction of protection-relevant metrics, and coordination checks.}
-    \label{fig:methodology}
-\end{figure}
+% \begin{figure}[t]
+%     \centering
+%     \input{figures/methodology_flowchart}
+%     \caption{Flow of the proposed protection evaluation methodology: model assembly, fault scenario definition, transient simulation, extraction of protection-relevant metrics, and coordination checks.}
+%     \label{fig:methodology}
+% \end{figure}
 
  The workflow in Fig.~\ref{fig:methodology} structures protection evaluation around engineering questions that map directly to device requirements. Starting from a system description (topology, source characteristics, and cable data), a set of credible fault locations and fault types is generated. Time-domain simulation is used to compute prospective fault current and voltage trajectories for each scenario. From these waveforms, the method extracts peak current, rise time, and $I^2t$ to verify interruption capability, as well as voltage drop and recovery metrics to assess load ride-through. A coordination step then checks selectivity across protection zones by comparing device operating times and energy let-through margins.
 
