@@ -17,7 +17,7 @@
 	\begin{axis}
 	[%
 	xlabel={Time~[ms]},
-	ylabel={Current through Q-12~[kA]},
+	ylabel={Current through protection device~[kA]},
 	xmin=9.5,xmax=13,
 	ymin=-2,ymax=20,
 	xtick={9.5,10,10.5,11,11.5,12,12.5,13},
@@ -25,12 +25,10 @@
 	minor tick num=1,
 	grid=both,
 	clip=false,
-	legend style={at={(0.02,0.98)},anchor=north west,font=\footnotesize},
 	title={\textbf{Fault at start of line -- Q-12 current}},
 	]%
 	
-	\addplot[line width=2pt,blue,mark=none,restrict x to domain=9.5:13] table[x expr=\thisrowno{0}*1000,y expr=\thisrowno{50}/1000,col sep=comma] {fault_start_of_line.csv};
-	\addlegendentry{Q-12 port 1}
+	\addplot[line width=2pt,blue,mark=none,smooth,restrict x to domain=9.5:13] table[x expr=\thisrowno{0}*1000,y expr=\thisrowno{50}/1000,col sep=comma] {fault_start_of_line.csv};
 	
 	% Fault instant
 	\draw[black,dashed,line width=1.5pt] (axis cs:10,-2) -- (axis cs:10,20);
@@ -40,10 +38,9 @@
 	\draw[red,densely dashed,line width=1.2pt] (axis cs:9.5,17.9) -- (axis cs:13,17.9);
 	\node[red,anchor=south east,font=\scriptsize] at (axis cs:13,17.5) {$I_\mathrm{peak} = 17.9\,\mathrm{kA}$};
 	
-	% Mark peak current point at t=11.46ms
-	\fill[red] (axis cs:11.46,17.9) circle[radius=0.06];
-	\draw[->,red,thick] (axis cs:12.2,15) -- (axis cs:11.55,17.7);
-	\node[red,anchor=north west,font=\scriptsize] at (axis cs:12.2,14.8) {Peak at $t = 11.46\,\mathrm{ms}$};
+	% Vertical line at peak current (t=11.46ms)
+	\draw[red,dashed,line width=1.2pt] (axis cs:11.46,-2) -- (axis cs:11.46,20);
+	\node[red,anchor=south west,font=\scriptsize] at (axis cs:11.5,18.2) {$t_\mathrm{peak} = 11.46\,\mathrm{ms}$};
 	
 	\end{axis}
 	\end{tikzpicture}
