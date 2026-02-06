@@ -19,9 +19,9 @@
 \title{Scalable Approach to Designing Protection for Gigawatt-scale DC Data Centers}
 
 \author{\IEEEauthorblockN{Giel Van den Broeck\IEEEauthorrefmark{1},
-Pavel Purgat\IEEEauthorrefmark{2},
-Dusan Brhlik\IEEEauthorrefmark{1},
 Fernando Capes\IEEEauthorrefmark{2},
+Dusan Brhlik\IEEEauthorrefmark{1},
+Pavel Purgat\IEEEauthorrefmark{2},
 Antonello Antoniazzi\IEEEauthorrefmark{2}}
 \IEEEauthorblockA{\IEEEauthorrefmark{1}Direct Energy Partners\\
 Email: \{giel.vandenbroeck, dusan.brhlik\}@directenergypartners.com}
@@ -31,7 +31,7 @@ Email: \{pavel.purgat, fernando.capes, antonello.antoniazzi\}@\{at, ch, it\}.abb
 \maketitle
 
 \begin{abstract}
-As AI and high-performance computing (HPC) drive data center power densities toward the megawatt-per-row scale, 400~V and 800~V DC distribution architectures are becoming essential for efficiency and availability. Yet, while the industry demand for these systems is clear, a practical methodology for designing their protection remains a significant challenge. This digest addresses this gap by presenting one of the first 'how-to' workflows for DC short-circuit protection design in multi-source, converter-dominated environments. The proposed simulation-based methodology focuses on the three critical requirements for robust protection: ensuring interruption capability through peak current analysis, maintaining speed of operation to prevent voltage collapse, and verifying selective coordination. The full paper will provide an in-depth exploration of this framework, including application to an 800~V reference design and the disclosure of extensive laboratory validation results.
+As AI and high-performance computing (HPC) drive data center power densities toward the megawatt-per-row scale, 800~V DC distribution architectures are the key to enabling IT racks with power densities above 400 kW. While the industry demand for these systems is clear, a practical protection design remains a challenge for the majority of system integrators. This digest addresses this gap by presenting one of the first 'how-to' workflows for DC short-circuit protection design in multi-source, converter-dominated environments. The proposed simulation-based methodology aims to maximize compute availability by focusing on the three critical requirements for selective and efficient system protection: ensuring interruption capability through peak current analysis, maintaining speed of operation to prevent voltage collapse, and verifying selective coordination. The full paper will provide an in-depth exploration of this framework, including application to an 800~V reference design and the disclosure of extensive laboratory validation results.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -40,11 +40,11 @@ DC microgrids, short-circuit protection, solid-state circuit breakers, data cent
 
 \section{Introduction}
 
- DC power distribution is emerging as a key enabler for the next generation of AI/HPC data centers. Power densities are moving beyond 100~kW per rack toward megawatt-scale compute blocks, motivating DC architectures at 400~V and 800~V with multiple sources (utility grid, battery storage, renewable energy sources and other distributed energy resources) to manage fast load transients and guarantee the highest availability~\cite{nvidia_800vdc}. In these systems, fault clearing is critical. It must be fast enough to avoid widespread voltage collapse and downtime, while remaining selective to isolate only the faulted section.
+ DC power distribution emerged as a key enabler for the next generation of AI data centers. Power densities are moving towards megawatt-scale compute blocks, that require 800~V DC feeds with redundant sources (utility grid, battery storage, renewable energy sources, etc.) to manage both fast load transients, idle periods and guarantee the highest compute availability~\cite{nvidia_800vdc}. In these systems, selective fault clearing is critical. It must be fast enough to minimize blast radius and avoid LVDC system voltage collapse, while maintaining selectivity.
 
- Unlike AC networks, DC faults exhibit a rapid, non-oscillatory current rise and have no natural current zero crossing, complicating interruption and coordination~\cite{ravyts_fuse,cairoli_sscb_review}. Moreover, each source class contributes with distinct transient characteristics (e.g., capacitor discharge, battery internal impedance response, converter current limiting and fault-blocking behavior) that strongly shape both the peak current and the post-fault voltage trajectory~\cite{converter_fault_blocking}. These dynamics are central for assessing equipment withstand capabilities (peak current and $I^2t$) and for verifying that protection operates quickly enough to preserve service continuity.
+ Unlike AC networks, DC faults exhibit a rapid, non-oscillatory current rise and have no natural current zero crossing, complicating both interruption and protection device coordination~\cite{ravyts_fuse,cairoli_sscb_review}. Moreover, each DC source type contributes with distinct transient characteristics (e.g., capacitor discharge, battery internal impedance response, converter current limiting and fault-blocking behavior) that define both the peak current and the post-fault voltage trajectory~\cite{converter_fault_blocking}. These dynamics are central for assessing equipment withstand capabilities (peak current and $I^2t$) and for verifying that protection operates quickly enough to preserve compute continuity.
 
- Existing standard practice does not yet provide a scalable calculation method for such multi-source, converter-dominated DC microgrids. IEC~61660 offers guidance for auxiliary DC installations and selected source types, but does not cover modern DC/DC converter behavior or time-varying bus voltages following a fault~\cite{iec61660}. As a result, designers cannot reliably demonstrate by calculation that:
+ Existing industry standard practice does not yet provide a scalable calculation method for such multi-source, converter-dominated DC microgrids. IEC~61660 offers guidance for auxiliary DC installations and selected source types, but does not cover (isolated) DC/DC converter behavior or time-varying bus voltages following a fault~\cite{iec61660}. As a result, designers cannot reliably demonstrate by calculation that:
  (i) protection devices can interrupt the prospective fault current,
  (ii) the cleared-fault voltage stays above ride-through limits, and
  (iii) the protection device closest to the faulted section can interrupt the fault current first (selectivity).
@@ -53,8 +53,8 @@ DC microgrids, short-circuit protection, solid-state circuit breakers, data cent
 
 \begin{figure}[t]
     \centering
-    \framebox[\linewidth]{\rule{0pt}{5cm}\centering \textbf{Placeholder: System Architecture (5-to-4 Subsystem)}}
-    \caption{Schematic of the 800V DC datacenter subsystem showing the 5-to-4 redundancy configuration and protection zones.}
+    \includegraphics{figures/DC_Topologies_cropped.pdf}
+    \caption{Schematic of the 800V DC datacenter subsystem showing the 4-to-make-3 redundancy configuration and protection devices.}
     \label{fig:system_architecture}
 \end{figure}
 
@@ -96,9 +96,9 @@ DC microgrids, short-circuit protection, solid-state circuit breakers, data cent
 
 \section{Conclusion}
 
-Despite the widespread industry interest in high-power DC distribution for data centers, a practical 'how-to' for designing robust short-circuit protection remains conspicuously absent from current engineering literature. This paper addresses this gap by presenting one of the first simulation-based workflows specifically tailored for the complexities of converter-dominated, multi-source DC architectures. By focusing on the critical pillars of protection design---verifying peak current for interruption capability, ensuring speed of operation to prevent voltage collapse, and demonstrating selective coordination---the methodology provides a scalable framework for next-generation 400~V and 800~V systems. 
+The widespread industry interest in high-power DC distribution for data centers necessitates a practical 'how-to' for designing robust short-circuit protection This paper addresses this gap by presenting the first-of-a-kind simulation-based workflows specifically tailored for the complexities of converter-dominated, multi-source DC architectures. By focusing on the critical pillars of protection design---verifying peak current for interruption capability, ensuring speed of operation to prevent voltage collapse, and demonstrating selective coordination---the methodology provides a scalable framework for next-generation 800~V systems. 
 
-This digest establishes the core principles; the full paper will delve deeper into the modeling details, applying the methodology to an 800~V reference design and disclosing extensive laboratory validation results. By bridging the gap between theoretical fault analysis and deployment-ready protection schemes, this work serves as a foundational step toward the resilient DC data centers that the industry urgently demands.
+This digest establishes the core principles; the full paper will explain the modeling details, applying the methodology to an 800~V reference design and disclosing extensive laboratory validation results. By bridging the gap between theoretical fault analysis and deployment-ready protection schemes, this work serves as a foundational step toward the DC data centers that enable further AI evolution.
 
 % \section*{Acknowledgment}
 
