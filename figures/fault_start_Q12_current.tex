@@ -6,7 +6,7 @@
 \usepackage{pgfplots}
 \usepackage{pgfplotstable}
 \pgfplotsset{compat=1.8}
-\pgfplotsset{width=9cm,height=7cm}
+\pgfplotsset{width=10cm,height=7cm}
 
 \pgfplotsset{every mark/.append style={solid}}
 
@@ -18,43 +18,33 @@
 	[%
 	xlabel={Time~[ms]},
 	ylabel={Current through Q-12~[kA]},
-	xmin=0,xmax=30,
-	ymin=-20,ymax=20,
-	xtick={0,5,10,15,20,25,30},
-	ytick={-20,-15,-10,-5,0,5,10,15,20},
+	xmin=9.5,xmax=13,
+	ymin=-2,ymax=20,
+	xtick={9.5,10,10.5,11,11.5,12,12.5,13},
+	ytick={0,2,4,6,8,10,12,14,16,18,20},
 	minor tick num=1,
 	grid=both,
-	clip=true,
-	legend style={at={(0.98,0.98)},anchor=north east,font=\footnotesize},
+	clip mode=individual,
+	legend style={at={(0.02,0.98)},anchor=north west,font=\footnotesize},
 	title={\textbf{Fault at start of line -- Q-12 current}},
+	clip=false,
 	]%
 	
 	\addplot[line width=2pt,blue,mark=none] table[x expr=\thisrowno{0}*1000,y expr=\thisrowno{50}/1000,col sep=comma] {fault_start_of_line.csv};
 	\addlegendentry{Q-12 port 1}
 	
 	% Fault instant
-	\draw[black,dashed,line width=1.5pt] (axis cs:10,-20) -- (axis cs:10,20);
-	\node[black,anchor=south west,font=\footnotesize\bfseries] at (axis cs:10.2,18.5) {Fault};
+	\draw[black,dashed,line width=1.5pt] (axis cs:10,-2) -- (axis cs:10,20);
+	\node[black,anchor=south west,font=\footnotesize\bfseries] at (axis cs:10.05,19) {Fault};
 	
 	% Peak prospective fault current
-	\draw[red,densely dashed,line width=1.2pt] (axis cs:0,17.9) -- (axis cs:30,17.9);
-	\node[red,anchor=south west,font=\scriptsize] at (axis cs:0.2,18.1) {$I_\mathrm{peak} \approx 18\,\mathrm{kA}$};
+	\draw[red,densely dashed,line width=1.2pt] (axis cs:9.5,17.9) -- (axis cs:13,17.9);
+	\node[red,anchor=south east,font=\scriptsize] at (axis cs:13,17.5) {$I_\mathrm{peak} = 17.9\,\mathrm{kA}$};
 	
-	% Protection device rated breaking capacity annotation
-	\draw[<->,thick,orange] (axis cs:27,-17.9) -- (axis cs:27,17.9);
-	\node[orange,anchor=west,font=\scriptsize,text width=2.5cm,align=left] at (axis cs:27.3,0) {$I_\mathrm{cu}$ rated breaking capacity};
-	
-	% Trip threshold annotation
-	\draw[green!50!black,densely dashed,line width=1.2pt] (axis cs:10,5) -- (axis cs:30,5);
-	\node[green!50!black,anchor=south west,font=\scriptsize] at (axis cs:20,5.3) {$I_\mathrm{trip}$};
-	
-	% Time-to-trip annotation
-	\draw[<->,thick,violet] (axis cs:10,-19) -- (axis cs:12,-19);
-	\node[violet,anchor=north,font=\scriptsize] at (axis cs:11,-19.5) {$t_\mathrm{trip}$};
-	
-	% 3x higher current annotation
-	\draw[<-,thick,red!60!black] (axis cs:10.5,16) -- (axis cs:16,13);
-	\node[red!60!black,anchor=west,font=\scriptsize,text width=3.5cm,align=left] at (axis cs:16,13) {With CB inductance: current limited vs.\ no-inductance case};
+	% Mark peak current point at t=11.46ms
+	\fill[red] (axis cs:11.46,17.9) circle[radius=0.06];
+	\draw[->,red,thick] (axis cs:12.2,15) -- (axis cs:11.55,17.7);
+	\node[red,anchor=north west,font=\scriptsize] at (axis cs:12.2,14.8) {Peak at $t = 11.46\,\mathrm{ms}$};
 	
 	\end{axis}
 	\end{tikzpicture}
