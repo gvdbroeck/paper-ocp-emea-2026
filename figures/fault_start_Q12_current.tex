@@ -19,9 +19,9 @@
 	xlabel={Time~[ms]},
 	ylabel={Current through Q-12~[kA]},
 	xmin=0,xmax=30,
-	ymin=-110,ymax=110,
+	ymin=-20,ymax=20,
 	xtick={0,5,10,15,20,25,30},
-	ytick={-100,-75,-50,-25,0,25,50,75,100},
+	ytick={-20,-15,-10,-5,0,5,10,15,20},
 	minor tick num=1,
 	grid=both,
 	clip=true,
@@ -33,28 +33,28 @@
 	\addlegendentry{Q-12 port 1}
 	
 	% Fault instant
-	\draw[black,dashed,line width=1.5pt] (axis cs:10,-110) -- (axis cs:10,110);
-	\node[black,anchor=south west,font=\footnotesize\bfseries] at (axis cs:10.2,100) {Fault};
+	\draw[black,dashed,line width=1.5pt] (axis cs:10,-20) -- (axis cs:10,20);
+	\node[black,anchor=south west,font=\footnotesize\bfseries] at (axis cs:10.2,18.5) {Fault};
 	
 	% Peak prospective fault current
-	\draw[red,densely dashed,line width=1.2pt] (axis cs:0,100.4) -- (axis cs:30,100.4);
-	\node[red,anchor=south west,font=\scriptsize] at (axis cs:0.2,102) {$I_\mathrm{peak} \approx 100\,\mathrm{kA}$};
+	\draw[red,densely dashed,line width=1.2pt] (axis cs:0,17.9) -- (axis cs:30,17.9);
+	\node[red,anchor=south west,font=\scriptsize] at (axis cs:0.2,18.1) {$I_\mathrm{peak} \approx 18\,\mathrm{kA}$};
 	
 	% Protection device rated breaking capacity annotation
-	\draw[<->,thick,orange] (axis cs:27,-100.4) -- (axis cs:27,100.4);
+	\draw[<->,thick,orange] (axis cs:27,-17.9) -- (axis cs:27,17.9);
 	\node[orange,anchor=west,font=\scriptsize,text width=2.5cm,align=left] at (axis cs:27.3,0) {$I_\mathrm{cu}$ rated breaking capacity};
 	
 	% Trip threshold annotation
-	\draw[green!50!black,densely dashed,line width=1.2pt] (axis cs:10,15) -- (axis cs:30,15);
-	\node[green!50!black,anchor=south west,font=\scriptsize] at (axis cs:20,16) {$I_\mathrm{trip}$};
+	\draw[green!50!black,densely dashed,line width=1.2pt] (axis cs:10,5) -- (axis cs:30,5);
+	\node[green!50!black,anchor=south west,font=\scriptsize] at (axis cs:20,5.3) {$I_\mathrm{trip}$};
 	
 	% Time-to-trip annotation
-	\draw[<->,thick,violet] (axis cs:10,-105) -- (axis cs:12,-105);
-	\node[violet,anchor=north,font=\scriptsize] at (axis cs:11,-106) {$t_\mathrm{trip}$};
+	\draw[<->,thick,violet] (axis cs:10,-19) -- (axis cs:12,-19);
+	\node[violet,anchor=north,font=\scriptsize] at (axis cs:11,-19.5) {$t_\mathrm{trip}$};
 	
 	% 3x higher current annotation
-	\draw[<-,thick,red!60!black] (axis cs:10.3,95) -- (axis cs:15,85);
-	\node[red!60!black,anchor=west,font=\scriptsize,text width=3cm,align=left] at (axis cs:15,85) {$\sim$3$\times$ higher than end-of-line fault};
+	\draw[<-,thick,red!60!black] (axis cs:10.5,16) -- (axis cs:16,13);
+	\node[red!60!black,anchor=west,font=\scriptsize,text width=3.5cm,align=left] at (axis cs:16,13) {With CB inductance: current limited vs.\ no-inductance case};
 	
 	\end{axis}
 	\end{tikzpicture}

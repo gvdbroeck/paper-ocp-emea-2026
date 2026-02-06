@@ -26,7 +26,7 @@
 	grid=both,
 	clip=true,
 	legend style={at={(0.98,0.02)},anchor=south east,font=\footnotesize},
-	title={\textbf{Fault at start of line -- Load voltages}},
+	title={\textbf{Fault at start of line (with CB inductance) -- Load voltages}},
 	]%
 	
 	\addplot[line width=1.5pt,blue,mark=none] table[x expr=\thisrowno{0}*1000,y index=13,col sep=comma] {fault_start_of_line.csv};
@@ -51,8 +51,8 @@
 	\node[orange,anchor=north west,font=\scriptsize] at (axis cs:0.2,630) {$0.8 \times V_\mathrm{nom}$};
 	
 	% Annotation: voltage collapse is more severe for close-in fault
-	\draw[<-,thick,violet] (axis cs:11,-800) -- (axis cs:16,-800) -- (axis cs:16,-550);
-	\node[violet,anchor=south,font=\scriptsize,text width=3.2cm,align=center] at (axis cs:16,-540) {Close-in fault: deeper voltage collapse};
+	\draw[<-,thick,violet] (axis cs:13,-755) -- (axis cs:18,-755) -- (axis cs:18,-550);
+	\node[violet,anchor=south,font=\scriptsize,text width=3.5cm,align=center] at (axis cs:18,-540) {CB inductance limits $dI/dt$, voltage still collapses to $-755\,\mathrm{V}$};
 	
 	\end{axis}
 	\end{tikzpicture}
