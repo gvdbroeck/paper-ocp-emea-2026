@@ -24,13 +24,12 @@
 	ytick={0,2,4,6,8,10,12,14,16,18,20},
 	minor tick num=1,
 	grid=both,
-	clip mode=individual,
+	clip=false,
 	legend style={at={(0.02,0.98)},anchor=north west,font=\footnotesize},
 	title={\textbf{Fault at start of line -- Q-12 current}},
-	clip=false,
 	]%
 	
-	\addplot[line width=2pt,blue,mark=none] table[x expr=\thisrowno{0}*1000,y expr=\thisrowno{50}/1000,col sep=comma] {fault_start_of_line.csv};
+	\addplot[line width=2pt,blue,mark=none,restrict x to domain=9.5:13] table[x expr=\thisrowno{0}*1000,y expr=\thisrowno{50}/1000,col sep=comma] {fault_start_of_line.csv};
 	\addlegendentry{Q-12 port 1}
 	
 	% Fault instant
