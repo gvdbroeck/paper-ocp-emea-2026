@@ -1,0 +1,59 @@
+\documentclass[border=2mm,class=extreport,12pt]{standalone}
+
+\usepackage{tikz}
+\usetikzlibrary{arrows,patterns}
+
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\pgfplotsset{compat=1.8}
+\pgfplotsset{width=9cm,height=7cm}
+
+\pgfplotsset{every mark/.append style={solid}}
+
+\tikzstyle{every node}=[font=\small]
+
+\begin{document}
+	\begin{tikzpicture}
+	\begin{axis}
+	[%
+	xlabel={Time~[ms]},
+	ylabel={Voltage~[V]},
+	xmin=0,xmax=30,
+	ymin=-900,ymax=1000,
+	xtick={0,5,10,15,20,25,30},
+	ytick={-800,-600,-400,-200,0,200,400,600,800,1000},
+	minor tick num=1,
+	grid=both,
+	clip=true,
+	legend style={at={(0.98,0.02)},anchor=south east,font=\footnotesize},
+	title={\textbf{Fault at start of line -- Load voltages}},
+	]%
+	
+	\addplot[line width=1.5pt,blue,mark=none] table[x expr=\thisrowno{0}*1000,y index=13,col sep=comma] {fault_start_of_line.csv};
+	\addlegendentry{LOAD-27}
+	
+	\addplot[line width=1.5pt,red!80!black,mark=none] table[x expr=\thisrowno{0}*1000,y index=3,col sep=comma] {fault_start_of_line.csv};
+	\addlegendentry{LOAD-28}
+	
+	\addplot[line width=1.5pt,green!60!black,mark=none] table[x expr=\thisrowno{0}*1000,y index=11,col sep=comma] {fault_start_of_line.csv};
+	\addlegendentry{LOAD-30}
+	
+	% Fault instant
+	\draw[black,dashed,line width=1.5pt] (axis cs:10,-900) -- (axis cs:10,1000);
+	\node[black,anchor=south west,font=\footnotesize\bfseries] at (axis cs:10.2,900) {Fault};
+	
+	% Nominal voltage band
+	\draw[orange,densely dotted,line width=1pt] (axis cs:0,800) -- (axis cs:30,800);
+	\node[orange,anchor=south west,font=\scriptsize] at (axis cs:0.2,810) {$V_\mathrm{nom} = 800\,\mathrm{V}$};
+	
+	% Under-voltage threshold (e.g. 80% of nominal)
+	\draw[orange,densely dotted,line width=1pt] (axis cs:0,640) -- (axis cs:30,640);
+	\node[orange,anchor=north west,font=\scriptsize] at (axis cs:0.2,630) {$0.8 \times V_\mathrm{nom}$};
+	
+	% Annotation: voltage collapse is more severe for close-in fault
+	\draw[<-,thick,violet] (axis cs:11,-800) -- (axis cs:16,-800) -- (axis cs:16,-550);
+	\node[violet,anchor=south,font=\scriptsize,text width=3.2cm,align=center] at (axis cs:16,-540) {Close-in fault: deeper voltage collapse};
+	
+	\end{axis}
+	\end{tikzpicture}
+\end{document}

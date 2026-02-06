@@ -1,0 +1,61 @@
+\documentclass[border=2mm,class=extreport,12pt]{standalone}
+
+\usepackage{tikz}
+\usetikzlibrary{arrows,patterns}
+
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\pgfplotsset{compat=1.8}
+\pgfplotsset{width=9cm,height=7cm}
+
+\pgfplotsset{every mark/.append style={solid}}
+
+\tikzstyle{every node}=[font=\small]
+
+\begin{document}
+	\begin{tikzpicture}
+	\begin{axis}
+	[%
+	xlabel={Time~[ms]},
+	ylabel={Current through Q-12~[kA]},
+	xmin=0,xmax=30,
+	ymin=-110,ymax=110,
+	xtick={0,5,10,15,20,25,30},
+	ytick={-100,-75,-50,-25,0,25,50,75,100},
+	minor tick num=1,
+	grid=both,
+	clip=true,
+	legend style={at={(0.98,0.98)},anchor=north east,font=\footnotesize},
+	title={\textbf{Fault at start of line -- Q-12 current}},
+	]%
+	
+	\addplot[line width=2pt,blue,mark=none] table[x expr=\thisrowno{0}*1000,y expr=\thisrowno{50}/1000,col sep=comma] {fault_start_of_line.csv};
+	\addlegendentry{Q-12 port 1}
+	
+	% Fault instant
+	\draw[black,dashed,line width=1.5pt] (axis cs:10,-110) -- (axis cs:10,110);
+	\node[black,anchor=south west,font=\footnotesize\bfseries] at (axis cs:10.2,100) {Fault};
+	
+	% Peak prospective fault current
+	\draw[red,densely dashed,line width=1.2pt] (axis cs:0,100.4) -- (axis cs:30,100.4);
+	\node[red,anchor=south west,font=\scriptsize] at (axis cs:0.2,102) {$I_\mathrm{peak} \approx 100\,\mathrm{kA}$};
+	
+	% Protection device rated breaking capacity annotation
+	\draw[<->,thick,orange] (axis cs:27,-100.4) -- (axis cs:27,100.4);
+	\node[orange,anchor=west,font=\scriptsize,text width=2.5cm,align=left] at (axis cs:27.3,0) {$I_\mathrm{cu}$ rated breaking capacity};
+	
+	% Trip threshold annotation
+	\draw[green!50!black,densely dashed,line width=1.2pt] (axis cs:10,15) -- (axis cs:30,15);
+	\node[green!50!black,anchor=south west,font=\scriptsize] at (axis cs:20,16) {$I_\mathrm{trip}$};
+	
+	% Time-to-trip annotation
+	\draw[<->,thick,violet] (axis cs:10,-105) -- (axis cs:12,-105);
+	\node[violet,anchor=north,font=\scriptsize] at (axis cs:11,-106) {$t_\mathrm{trip}$};
+	
+	% 3x higher current annotation
+	\draw[<-,thick,red!60!black] (axis cs:10.3,95) -- (axis cs:15,85);
+	\node[red!60!black,anchor=west,font=\scriptsize,text width=3cm,align=left] at (axis cs:15,85) {$\sim$3$\times$ higher than end-of-line fault};
+	
+	\end{axis}
+	\end{tikzpicture}
+\end{document}
