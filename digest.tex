@@ -32,7 +32,7 @@ Email: \{pavel.purgat, fernando.capes, antonello.antoniazzi\}@\{at, ch, it\}.abb
 \maketitle
 
 \begin{abstract}
-As AI and high-performance computing (HPC) drive data center power densities toward the megawatt-per-row scale, 800~V DC distribution architectures are the key to enabling IT racks with power densities above 400 kW. While the industry demand for these systems is clear, a practical protection design remains a challenge for the majority of system integrators. This digest addresses this gap by presenting one of the first 'how-to' workflows for DC short-circuit protection design in multi-source, converter-dominated environments. The proposed simulation-based methodology aims to maximize compute availability by focusing on the three critical requirements for selective and efficient system protection: ensuring interruption capability through peak current analysis, maintaining speed of operation to prevent voltage collapse, and verifying selective coordination. The full paper will provide an in-depth exploration of this framework, including application to an 800~V reference design and the disclosure of extensive laboratory validation results.
+As AI and high-performance computing (HPC) drive data center power densities toward the megawatt-per-row scale, 800~V DC distribution architectures are emerging as the key enabler for IT racks above 400~kW. While industry demand for these systems is clear, practical short-circuit protection design remains a challenge: fault currents are dominated by rapid capacitor discharge from fault-blocking or non-fault-blocking converters, bus voltages can collapse within a millisecond, and no established calculation method covers these dynamics. This digest addresses this gap by presenting a simulation-based methodology for DC protection design in multi-source, converter-dominated environments. The approach evaluates three critical requirements: ensuring interruption capability against capacitor-driven peak currents, maintaining speed of operation to prevent voltage collapse, and verifying selective coordination. The full paper will provide an in-depth exploration of this framework, including application to an 800~V reference design and disclosure of laboratory validation results.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -61,14 +61,14 @@ DC microgrids, short-circuit protection, solid-state circuit breakers, data cent
 
 \section{Methodology}
 
-\begin{figure}[t]
-    \centering
-    \input{figures/methodology_flowchart}
-    \caption{Protection evaluation workflow: from system inputs through transient simulation to a protection report with device ratings and coordination margins.}
-    \label{fig:methodology}
-\end{figure}
+% \begin{figure}[t]
+%     \centering
+%     \input{figures/methodology_flowchart}
+%     \caption{Protection evaluation workflow: from system inputs through transient simulation to a protection report with device ratings and coordination margins.}
+%     \label{fig:methodology}
+% \end{figure}
 
-The methodology (Fig.~\ref{fig:methodology}) structures protection evaluation around the engineering questions that map directly to device requirements. It extends the principles of IEC~61660~\cite{iec61660} to converter-dominated topologies by replacing the standard's per-source analytical envelopes with a unified time-domain simulation that captures multi-source interactions, converter behavior, and bus voltage dynamics.
+The methodology structures protection evaluation around the engineering questions that map directly to device requirements. It extends the principles of IEC~61660~\cite{iec61660} to converter-dominated topologies by replacing the standard's per-source analytical envelopes with a unified time-domain simulation that captures multi-source interactions, converter behavior, and bus voltage dynamics.
 
 \subsection{Component Modeling}
 Each source is represented by a transient-capable model parameterized from standard engineering specifications (datasheets and cable tables). Batteries are modeled as a voltage source behind an internal impedance; AC/DC rectifiers contribute a capacitor-discharge transient followed by a current-limited steady-state feed; DC/DC converters are classified as either \emph{fault-blocking} (ceasing current injection upon detecting a downstream fault) or \emph{non-fault-blocking} (continuing to feed fault current). This classification is critical: a non-isolated DC/DC converter connecting a battery bank may allow the battery to contribute additional short-circuit current through the converter's freewheeling path. Cables are modeled as series $RL$ impedances.
@@ -109,7 +109,7 @@ A bolted short-circuit fault is applied at the close-in terminals of protection 
     \label{fig:simulation_results}
 \end{figure}
 
-\textbf{Interruption capability.} The prospective peak current of 17.9~kA (Fig.~\ref{fig:fault_start_current}) defines the minimum required breaking capacity $I_\mathrm{cu}$ for Q-12. This value results from the superposition of the AC/DC rectifier capacitor discharge and the battery's contribution through the DC/DC converter. A conventional molded-case circuit breaker rated at 10~kA would be inadequate; a solid-state circuit breaker (SSCB) or a high-performance fuse with sufficient $I_\mathrm{cu}$ is required.
+\textbf{Interruption capability.} The prospective peak current of 17.9~kA (Fig.~\ref{fig:fault_start_current}) defines the minimum required breaking capacity $I_\mathrm{cu}$ for Q-12. Because both the AC/DC solid-state transformer and the DC/DC converter are fault-blocking, the peak current is driven entirely by the discharge of their output filter capacitors---the battery behind the DC/DC converter does not contribute. A conventional molded-case circuit breaker rated at 10~kA would be inadequate; a solid-state circuit breaker (SSCB) or a high-performance fuse with sufficient $I_\mathrm{cu}$ is required.
 
 \textbf{Speed of operation.} The bus voltage drops below the 80\% ride-through threshold within 0.7~ms of fault inception (Fig.~\ref{fig:fault_start_voltage}). This leaves an extremely narrow window for fault detection and interruption before adjacent, healthy rack rows experience a voltage sag that may trigger compute errors. Protection devices with sub-millisecond detection and clearing times---characteristic of SSCBs---are therefore essential at this protection level.
 
@@ -117,9 +117,9 @@ A bolted short-circuit fault is applied at the close-in terminals of protection 
 
 \section{Conclusion}
 
-The widespread industry interest in high-power DC distribution for data centers necessitates a practical 'how-to' for designing robust short-circuit protection This paper addresses this gap by presenting the first-of-a-kind simulation-based workflows specifically tailored for the complexities of converter-dominated, multi-source DC architectures. By focusing on the critical pillars of protection design---verifying peak current for interruption capability, ensuring speed of operation to prevent voltage collapse, and demonstrating selective coordination---the methodology provides a scalable framework for next-generation 800~V systems. 
+The widespread industry interest in high-power DC distribution for data centers necessitates a practical methodology for designing robust short-circuit protection. This paper addresses this gap by presenting a simulation-based workflow tailored for converter-dominated, multi-source DC architectures. The case study demonstrated that, with fault-blocking converters, peak fault currents are driven by capacitor discharge and can reach tens of kiloamperes within roughly one millisecond---demanding sub-millisecond detection and clearing to prevent bus voltage collapse. By focusing on the three pillars of protection design---interruption capability, speed of operation, and selective coordination---the methodology provides a scalable framework for next-generation 800~V protection system design.
 
-This digest establishes the core principles; the full paper will explain the modeling details, applying the methodology to an 800~V reference design and disclosing extensive laboratory validation results. By bridging the gap between theoretical fault analysis and deployment-ready protection schemes, this work serves as a foundational step toward the DC data centers that enable further AI evolution.
+This digest established the core principles; the full paper will detail the component models, apply the methodology to the 800~V reference design, and disclose extensive laboratory validation results.
 
 % \section*{Acknowledgment}
 
