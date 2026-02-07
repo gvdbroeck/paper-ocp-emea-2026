@@ -77,7 +77,7 @@ Each source is represented by a transient-capable model parameterized from stand
 For a given topology, the method generates a set of credible bolted-fault locations at each bus and feeder. At each location, the prospective fault current and bus voltage trajectories are computed via time-domain simulation.
 
 \subsection{Protection-Relevant Metrics}
-From each simulated waveform the method extracts: (1)~peak prospective current $I_\mathrm{peak}$ and time-to-peak, (2)~energy let-through $I^2t$ over a defined clearing window, and (3)~the voltage trajectory $V(t)$ at adjacent buses. These metrics feed three protection checks:
+From each simulated waveform the method extracts: (1)~peak prospective current $I_\mathrm{peak}$ and time-to-peak, (2)~energy let-through $I^2t$ over a defined clearing window, and (3)~the voltage trajectory $V(t)$ at adjacent buses. In addition, the prospective fault current combined with empirical DC arc models~\cite{arc_flash_dc} enables estimation of arc-flash incident energy, linking protection clearing time directly to personnel safety requirements. These metrics feed three protection checks:
 \begin{enumerate}
     \item \textbf{Interruption capability} --- $I_\mathrm{peak} \leq I_\mathrm{cu}$: the prospective peak current must not exceed the rated breaking capacity of the protection device.
     \item \textbf{Speed of operation} --- the device must clear the fault before the bus voltage drops below the ride-through threshold (e.g.\ $0.8 \times V_\mathrm{nom}$), preserving compute continuity on healthy feeders.
