@@ -43,7 +43,7 @@ DC microgrids, short-circuit protection, solid-state circuit breakers, data cent
 
  DC power distribution emerged as a key enabler for the next generation of AI data centers. Power densities are moving towards megawatt-scale compute blocks, that require 800~V DC feeds with redundant sources (utility grid, battery storage, renewable energy sources, etc.) to manage both fast load transients, idle periods and guarantee the highest compute availability~\cite{nvidia_800vdc}. In these systems, selective fault clearing is critical. It must be fast enough to minimize blast radius and avoid LVDC system voltage collapse, while maintaining selectivity.
 
- Unlike AC networks, DC faults exhibit a rapid, non-oscillatory current rise and have no natural current zero crossing, complicating both interruption and protection device coordination~\cite{ravyts_fuse,cairoli_sscb_review}. Moreover, each DC source type contributes with distinct transient characteristics (e.g., capacitor discharge, battery internal impedance response, converter current limiting and fault-blocking behavior) that define both the peak current and the post-fault voltage trajectory~\cite{converter_fault_blocking}. These dynamics are central for assessing equipment withstand capabilities (peak current and $I^2t$) and for verifying that protection operates quickly enough to preserve compute continuity.
+ Unlike AC networks, DC faults exhibit a rapid, non-oscillatory current rise and have no natural current zero crossing, complicating both interruption and protection device coordination~\cite{ravyts_fuse,cairoli_sscb_review}. Moreover, each DC source type contributes with distinct transient characteristics (e.g., capacitor discharge, battery internal impedance response, converter current limiting and fault-blocking behavior) that define both the peak current and the post-fault voltage trajectory. These dynamics are central for assessing equipment withstand capabilities (peak current and $I^2t$) and for verifying that protection operates quickly enough to preserve compute continuity.
 
  Existing industry standard practice does not yet provide a scalable calculation method for such multi-source, converter-dominated DC microgrids. IEC~61660 offers guidance for auxiliary DC installations and selected source types, but does not cover (isolated) DC/DC converter behavior or time-varying bus voltages following a fault~\cite{iec61660}. As a result, designers cannot reliably demonstrate by calculation that:
  (i) protection devices can interrupt the prospective fault current,
@@ -52,60 +52,68 @@ DC microgrids, short-circuit protection, solid-state circuit breakers, data cent
 
  This paper proposes a practical, simulation-based methodology for evaluating and designing DC short-circuit protection. The approach integrates component-level transient models into a unified framework that can be applied using standard engineering specifications, removing the need for specialized differential-equation expertise. By computing critical transient metrics---such as peak current, rise time, $I^2t$, and voltage recovery---the methodology enables designers and inspection bodies to rigorously assess protection adequacy and selectivity in complex, multi-source DC architectures.
 
-\begin{figure}[t]
+\begin{figure*}[t]
     \centering
-    \includegraphics{figures/DC_Topologies_cropped.pdf}
-    \caption{Schematic of the 800V DC datacenter subsystem showing the 4-to-make-3 redundancy configuration and protection devices.}
+    \includegraphics[width=0.85\textwidth]{figures/DC_Topologies_cropped.pdf}
+    \caption{Schematic of the 800~V DC datacenter subsystem showing the 4-to-make-3 redundancy configuration with AC/DC infeed and battery back-up at each distribution panel.}
     \label{fig:system_architecture}
-\end{figure}
+\end{figure*}
 
 \section{Methodology}
 
-% \begin{figure}[t]
-%     \centering
-%     \input{figures/methodology_flowchart}
-%     \caption{Flow of the proposed protection evaluation methodology: model assembly, fault scenario definition, transient simulation, extraction of protection-relevant metrics, and coordination checks.}
-%     \label{fig:methodology}
-% \end{figure}
+\begin{figure}[t]
+    \centering
+    \input{figures/methodology_flowchart}
+    \caption{Protection evaluation workflow: from system inputs through transient simulation to a protection report with device ratings and coordination margins.}
+    \label{fig:methodology}
+\end{figure}
 
- The workflow in Fig.~\ref{fig:methodology} structures protection evaluation around engineering questions that map directly to device requirements. Starting from a system description (topology, source characteristics, and cable data), a set of credible fault locations and fault types is generated. Time-domain simulation is used to compute prospective fault current and voltage trajectories for each scenario. From these waveforms, the method extracts peak current, rise time, and $I^2t$ to verify interruption capability, as well as voltage drop and recovery metrics to assess load ride-through. A coordination step then checks selectivity across protection zones by comparing device operating times and energy let-through margins.
+The methodology (Fig.~\ref{fig:methodology}) structures protection evaluation around the engineering questions that map directly to device requirements. It extends the principles of IEC~61660~\cite{iec61660} to converter-dominated topologies by replacing the standard's per-source analytical envelopes with a unified time-domain simulation that captures multi-source interactions, converter behavior, and bus voltage dynamics.
 
-\section{Case Study: 800V DC Datacenter Architecture}
+\subsection{Component Modeling}
+Each source is represented by a transient-capable model parameterized from standard engineering specifications (datasheets and cable tables). Batteries are modeled as a voltage source behind an internal impedance; AC/DC rectifiers contribute a capacitor-discharge transient followed by a current-limited steady-state feed; DC/DC converters are classified as either \emph{fault-blocking} (ceasing current injection upon detecting a downstream fault) or \emph{non-fault-blocking} (continuing to feed fault current). This classification is critical: a non-isolated DC/DC converter connecting a battery bank may allow the battery to contribute additional short-circuit current through the converter's freewheeling path. Cables are modeled as series $RL$ impedances.
 
- We demonstrate the methodology on an 800~V DC subsystem representative of redundant, multi-source data center architectures (Fig.~\ref{fig:system_architecture}). Fault scenarios are evaluated at representative buses and feeders to quantify both the prospective fault current and the resulting bus voltage dynamics.
+\subsection{Fault Scenario Generation}
+For a given topology, the method generates a set of credible bolted-fault locations at each bus and feeder. At each location, the prospective fault current and bus voltage trajectories are computed via time-domain simulation.
 
-\subsection{Simulation Results}
+\subsection{Protection-Relevant Metrics}
+From each simulated waveform the method extracts: (1)~peak prospective current $I_\mathrm{peak}$ and time-to-peak, (2)~energy let-through $I^2t$ over a defined clearing window, and (3)~the voltage trajectory $V(t)$ at adjacent buses. These metrics feed three protection checks:
+\begin{enumerate}
+    \item \textbf{Interruption capability} --- $I_\mathrm{peak} \leq I_\mathrm{cu}$: the prospective peak current must not exceed the rated breaking capacity of the protection device.
+    \item \textbf{Speed of operation} --- the device must clear the fault before the bus voltage drops below the ride-through threshold (e.g.\ $0.8 \times V_\mathrm{nom}$), preserving compute continuity on healthy feeders.
+    \item \textbf{Selective coordination} --- the device closest to the fault must trip first; upstream devices act as backup only if the downstream device fails to clear.
+\end{enumerate}
+
+\section{Case Study: 800~V DC Datacenter}
+
+The methodology is applied to an 800~V DC subsystem representative of next-generation AI data center architectures (Fig.~\ref{fig:system_architecture}). The topology follows a \emph{4-to-make-3} redundancy scheme: four 3~MW AC/DC rectifiers feed a common 800~V DC bus, where any three can sustain the full load if one fails. Each 1~MW server rack row is supplied from a distribution panel via a 20~m feeder. At each distribution panel, two independent fault-current sources are present: the AC/DC infeed and a battery storage unit connected through a DC/DC converter. Branch feeders of 20~m connect the distribution panels to individual rack rows.
+
+A bolted short-circuit fault is applied at the close-in terminals of protection device Q-12 (start of the feeder to a rack row). Fig.~\ref{fig:simulation_results} shows the resulting transients.
 
 \begin{figure}[t]
     \centering
     \begin{subfigure}[t]{\linewidth}
         \centering
         \includegraphics[width=\linewidth]{figures/fault_start_voltage.pdf}
-        \caption{Bus voltage response. The dashed red line marks the 80\% undervoltage threshold ($0.8 \times V_\mathrm{nom} = 640$~V), crossed at $t \approx 10.7$~ms.}
+        \caption{Bus voltage collapse. The 80\% undervoltage threshold ($640$~V) is crossed at $t \approx 10.7$~ms, only 0.7~ms after fault inception.}
         \label{fig:fault_start_voltage}
     \end{subfigure}
     \\[1ex]
     \begin{subfigure}[t]{\linewidth}
         \centering
         \includegraphics[width=\linewidth]{figures/fault_start_Q12_current.pdf}
-        \caption{Prospective fault current through protection device Q-12. Peak current reaches 17.9~kA at $t = 11.46$~ms.}
+        \caption{Prospective fault current through Q-12. Peak current reaches $I_\mathrm{peak} = 17.9$~kA at $t = 11.46$~ms.}
         \label{fig:fault_start_current}
     \end{subfigure}
-    \caption{Close-in short-circuit fault simulation results showing voltage collapse and prospective fault current.}
+    \caption{Close-in fault at protection device Q-12: bus voltage and prospective fault current.}
     \label{fig:simulation_results}
 \end{figure}
 
-\subsection{Key Findings}
+\textbf{Interruption capability.} The prospective peak current of 17.9~kA (Fig.~\ref{fig:fault_start_current}) defines the minimum required breaking capacity $I_\mathrm{cu}$ for Q-12. This value results from the superposition of the AC/DC rectifier capacitor discharge and the battery's contribution through the DC/DC converter. A conventional molded-case circuit breaker rated at 10~kA would be inadequate; a solid-state circuit breaker (SSCB) or a high-performance fuse with sufficient $I_\mathrm{cu}$ is required.
 
-\begin{itemize}
-    \item Prospective fault current and $I^2t$ differ significantly between locations due to the mix of capacitor discharge, battery contribution, and converter current limiting/fault blocking.
-    \item Voltage collapse and recovery metrics provide a direct link between protection operating time and service continuity, complementing peak-current checks.
-    \item A zone-based coordination check can be evaluated systematically across scenarios to verify selectivity and backup protection assumptions.
-\end{itemize}
+\textbf{Speed of operation.} The bus voltage drops below the 80\% ride-through threshold within 0.7~ms of fault inception (Fig.~\ref{fig:fault_start_voltage}). This leaves an extremely narrow window for fault detection and interruption before adjacent, healthy rack rows experience a voltage sag that may trigger compute errors. Protection devices with sub-millisecond detection and clearing times---characteristic of SSCBs---are therefore essential at this protection level.
 
-\section{Discussion}
-
- The proposed workflow supports repeatable protection studies for converter-dominated DC architectures and provides a basis for defining standardized reporting (fault metrics, coordination margins, and voltage ride-through criteria). Solid-state interruption technologies can reduce energy let-through and improve selectivity, but require consistent, system-level evaluation methods to translate component ratings into deployment-ready protection schemes.
+\textbf{Selective coordination.} Q-12 must clear the fault before any upstream device (e.g.\ the main bus-tie breaker) trips. The simulation provides the time-current trajectory needed to verify that Q-12's operating characteristic lies entirely below the upstream device's curve for the computed fault current range, ensuring that only the faulted feeder is disconnected.
 
 \section{Conclusion}
 
