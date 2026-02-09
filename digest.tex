@@ -95,29 +95,29 @@ A bolted short-circuit fault is applied at the close-in terminals of protection 
     \begin{subfigure}[t]{\linewidth}
         \centering
         \includegraphics[width=\linewidth]{figures/fault_start_voltage.pdf}
-        \caption{Bus voltage collapse. The 80\% undervoltage threshold ($640$~V) is crossed at $t \approx 10.7$~ms, only 0.7~ms after fault inception.}
+        \caption{Bus voltage collapse. The 80\% undervoltage threshold ($640$~V) is crossed at $t \approx 10.075$~ms, only 0.075~ms after fault inception.}
         \label{fig:fault_start_voltage}
     \end{subfigure}
     \\[1ex]
     \begin{subfigure}[t]{\linewidth}
         \centering
         \includegraphics[width=\linewidth]{figures/fault_start_Q12_current.pdf}
-        \caption{Prospective fault current through Q-12. Peak current reaches $I_\mathrm{peak} = 17.9$~kA at $t = 11.46$~ms.}
+        \caption{Prospective fault current through Q-12. Peak current reaches $I_\mathrm{peak} = 96.1$~kA at $t = 10.67$~ms.}
         \label{fig:fault_start_current}
     \end{subfigure}
     \caption{Close-in fault at protection device Q-12: bus voltage and prospective fault current.}
     \label{fig:simulation_results}
 \end{figure}
 
-\textbf{Interruption capability.} The prospective peak current of 17.9~kA (Fig.~\ref{fig:fault_start_current}) defines the minimum required breaking capacity $I_\mathrm{cu}$ for Q-12. Because both the AC/DC solid-state transformer and the DC/DC converter are fault-blocking, the peak current is driven entirely by the discharge of their output filter capacitors---the battery behind the DC/DC converter does not contribute. A conventional molded-case circuit breaker rated at 10~kA would be inadequate; a solid-state circuit breaker (SSCB) or a high-performance fuse with sufficient $I_\mathrm{cu}$ is required.
+\textbf{Interruption capability.} The prospective peak current of 96.1~kA (Fig.~\ref{fig:fault_start_current}) defines the minimum required breaking capacity $I_\mathrm{cu}$ for Q-12. Because both the AC/DC solid-state transformer and the DC/DC converter are non-fault-blocking, the peak current is driven by the discharge of their output filter capacitors combined with the continued current feed from the converters. A conventional molded-case circuit breaker rated at 10~kA would be inadequate; a solid-state circuit breaker (SSCB) with sufficient $I_\mathrm{cu}$ is required.
 
-\textbf{Speed of operation.} The bus voltage drops below the 80\% ride-through threshold within 0.7~ms of fault inception (Fig.~\ref{fig:fault_start_voltage}). This leaves an extremely narrow window for fault detection and interruption before adjacent, healthy rack rows experience a voltage sag that may trigger compute errors. Protection devices with sub-millisecond detection and clearing times---characteristic of SSCBs---are therefore essential at this protection level.
+\textbf{Speed of operation.} The bus voltage drops below the 80\% ride-through threshold within 0.075~ms of fault inception (Fig.~\ref{fig:fault_start_voltage}). This leaves an extremely narrow window for fault detection and interruption before adjacent, healthy rack rows experience a voltage sag that may trigger compute errors. Protection devices with sub-millisecond detection and clearing times---characteristic of SSCBs---are therefore essential at this protection level.
 
 \textbf{Selective coordination.} Q-12 must be the only protection device clearing fault, before any upstream device or peer device trips. The simulation provides the time-current trajectory needed to verify that Q-12's operating characteristic lies entirely below the upstream device's curve for the computed fault current range, ensuring that only the faulted feeder is disconnected.
 
 \section{Conclusion}
 
-The widespread interest of the industry in high-power DC distribution for data centers requires a practical methodology to design robust short-circuit protection. This paper addresses this gap by presenting a simulation-based workflow tailored for converter-dominated, multi-source DC architectures. The case study demonstrated that, with fault-blocking converters, peak fault currents are driven by capacitor discharge and can reach tens of kiloamperes within roughly one millisecond---demanding sub-millisecond detection and clearing to prevent bus voltage collapse. By focusing on the three pillars of protection design---interruption capability, speed of operation, and selective coordination---the methodology provides a scalable framework for next-generation 800~V protection system design.
+The widespread industry interest in high-power DC distribution for data centers necessitates a practical methodology for designing robust short-circuit protection. This paper addresses this gap by presenting a simulation-based workflow tailored for converter-dominated, multi-source DC architectures. The case study demonstrated that, with fault-blocking converters, peak fault currents are driven by capacitor discharge and converter feed-through and can reach tens of kiloamperes within a fraction of a millisecond---demanding sub-millisecond detection and clearing to prevent bus voltage collapse. By focusing on the three pillars of protection design---interruption capability, speed of operation, and selective coordination---the methodology provides a scalable framework for next-generation 800~V protection system design.
 
 This digest established the core principles; the full paper will detail the component models, apply the methodology to the 800~V reference design, and disclose extensive laboratory validation results.
 
