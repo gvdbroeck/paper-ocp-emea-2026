@@ -79,22 +79,22 @@ From each simulated waveform the method extracts protection-relevant metrics: pe
 
 \section{Case Study: 800~V DC Datacenter}
 
-The methodology is applied to an 800~V DC subsystem representative of next-generation AI data center architectures (Fig.~\ref{fig:system_architecture}). The topology follows a \emph{4-to-make-3} redundancy scheme: four 3~MW MVAC/LVDC rectifiers  feed a common 800~V DC bus, where any three can sustain the full load if one fails. Each 1~MW server rack row is supplied from a distribution panel via a 20~m feeder. At each distribution panel, two independent fault-current sources are present: the AC/DC infeed and a battery storage unit connected through a DC/DC converter. Branch feeders of 20~m connect the distribution panels to individual rack rows. The feeder length is a parameter that can be simply adjusted for the particular data center layout.
+The methodology is applied to an 800~V DC subsystem representative of next-generation AI data center architectures (Fig.~\ref{fig:system_architecture}). The topology follows a \emph{4-to-make-3} redundancy scheme: four 3~MW MVAC/LVDC rectifiers feed a common 800~V DC bus, where any three can sustain the full load if one fails. Each distribution panel serves a 1~MW rack row via a 20~m feeder and has two independent fault-current sources: the AC/DC infeed and a battery storage unit connected through a DC/DC converter.
 
 A bolted short-circuit fault is applied at the close-in terminals of protection device Q-12 (start of the feeder to a rack row). Fig.~\ref{fig:simulation_results} shows the resulting transients.
 
 \begin{figure}[t]
     \centering
-    \begin{subfigure}[t]{\linewidth}
+    \begin{subfigure}[t]{0.8\linewidth}
         \centering
-        \includegraphics[width=\linewidth]{figures/fault_start_voltage.pdf}
+        \includegraphics[width=0.8\linewidth]{figures/fault_start_voltage.pdf}
         \caption{Bus voltage collapse. The 80\% undervoltage threshold ($640$~V) is crossed at $t \approx 10.075$~ms, only 0.075~ms after fault inception.}
         \label{fig:fault_start_voltage}
     \end{subfigure}
     \\[1ex]
-    \begin{subfigure}[t]{\linewidth}
+    \begin{subfigure}[t]{0.8\linewidth}
         \centering
-        \includegraphics[width=\linewidth]{figures/fault_start_Q12_current.pdf}
+        \includegraphics[width=0.8\linewidth]{figures/fault_start_Q12_current.pdf}
         \caption{Prospective fault current through Q-12. Peak current reaches $I_\mathrm{peak} = 96.1$~kA at $t = 10.67$~ms.}
         \label{fig:fault_start_current}
     \end{subfigure}
