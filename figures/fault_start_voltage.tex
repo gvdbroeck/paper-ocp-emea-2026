@@ -18,7 +18,7 @@
 	[%
 	xlabel={Time~[ms]},
 	ylabel={Voltage~[V]},
-	xmin=9.5,xmax=11,
+	xmin=9.5,xmax=10.5,
 	ymin=0,ymax=900,
 	% xtick={9.5,10,10.5,11,11.5,12,12.5,13},
 	ytick={-800,-600,-400,-200,0,200,400,600,800},
@@ -29,7 +29,7 @@
 	title={},
 	]%
 	
-	\addplot[line width=1.5pt,blue,mark=none,restrict x to domain=0:20,smooth] table[x expr=\thisrowno{0}*1000,y index=13,col sep=comma] {fault_start_of_line.csv};
+	\addplot[line width=1.5pt,blue,mark=none,restrict x to domain=0:20,smooth,tension=0.35] table[x expr=\thisrowno{0}*1000,y index=13,col sep=comma] {fault_start_of_line.csv};
 	% \addlegendentry{LOAD-27}
 	
 	% \addplot[line width=1.5pt,red!80!black,mark=none,restrict x to domain=0:20] table[x expr=\thisrowno{0}*1000,y index=3,col sep=comma] {fault_start_of_line.csv};
@@ -53,9 +53,9 @@
 	% Mark the 640V crossing point (~10.75 ms)
 	% \draw[red!70!black,thick] (axis cs:10.75,640) circle[radius=0.08];
 	% \draw[->,red!70!black,thick] (axis cs:11.5,500) -- (axis cs:10.85,640);
-	\node[red!70!black,anchor=south west,font=\scriptsize,rotate=90] at (axis cs:10.04,100) {$640\,\mathrm{V}$ at $t = 10.04\,\mathrm{ms}$};
+	\node[red!70!black,anchor=south west,font=\scriptsize,rotate=90] at (axis cs:10.075,100) {$640\,\mathrm{V}$ at $t = 10.075\,\mathrm{ms}$};
 
-    \draw[red!70!black,dashed,line width=1.5pt] (axis cs:10.04,-800) -- (axis cs:10.04,900);
+    \draw[red!70!black,dashed,line width=1.5pt] (axis cs:10.075,-800) -- (axis cs:10.075,900);
 	
 	\end{axis}
 	\end{tikzpicture}
