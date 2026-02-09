@@ -18,8 +18,8 @@
 	[%
 	xlabel={Time~[ms]},
 	ylabel={Current~[kA]},
-	xmin=8,xmax=14,
-	ymin=0,ymax=20,
+	xmin=9.5,xmax=12,
+	ymin=0,ymax=100,
 	% xtick={9.5,10,10.5,11,11.5,12,12.5,13},
 	% ytick={0,2,4,6,8,10,12,14,16,18,20},
 	minor tick num=1,
@@ -31,15 +31,15 @@
 	\addplot[line width=2pt,blue,mark=none,smooth,restrict x to domain=0:14] table[x expr=\thisrowno{0}*1000,y expr=\thisrowno{50}/1000,col sep=comma] {fault_start_of_line.csv};
 	
 	% Fault instant
-	\draw[black,dashed,line width=1.5pt] (axis cs:10,-2) -- (axis cs:10,20);
-	\node[black,anchor=south,font=\footnotesize\bfseries,rotate=90] at (axis cs:10.05,10) {Fault};
+	\draw[black,dashed,line width=1.5pt] (axis cs:10,-10) -- (axis cs:10,100);
+	\node[black,anchor=south,font=\footnotesize\bfseries,rotate=90] at (axis cs:10.05,50) {Fault};
 	
 	% Peak prospective fault current
-	\draw[red,densely dashed,line width=1.2pt] (axis cs:0,17.9) -- (axis cs:20,17.9);
+	\draw[red,densely dashed,line width=1.2pt] (axis cs:0,92.4) -- (axis cs:20,92.4);
 	
-	% Vertical line at peak current (t=11.46ms)
-	\draw[red,dashed,line width=1.2pt] (axis cs:11.46,-2) -- (axis cs:11.46,20);
-	\node[red,anchor=south west,font=\scriptsize,rotate=90] at (axis cs:11.5,0) {$I_\mathrm{peak} = 17.9\,\mathrm{kA}$ at $t = 11.46\,\mathrm{ms}$};
+	% Vertical line at peak current (t=10.55ms)
+	\draw[red,dashed,line width=1.2pt] (axis cs:10.55,-10) -- (axis cs:10.55,100);
+	\node[red,anchor=south west,font=\scriptsize,rotate=90] at (axis cs:10.6,0) {$I_\mathrm{peak} = 92.4\,\mathrm{kA}$ at $t = 10.55\,\mathrm{ms}$};
 	
 	\end{axis}
 	\end{tikzpicture}
