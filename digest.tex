@@ -52,12 +52,12 @@ DC microgrids, short-circuit protection, solid-state circuit breakers, data cent
 
  This paper proposes a practical, simulation-based methodology for evaluating and designing DC short-circuit protection. The approach integrates component-level transient models into a unified framework that can be applied using standard engineering specifications, removing the need for specialized differential-equation expertise. By computing critical transient metrics---such as peak current, rise time, $I^2t$, and voltage recovery---the methodology enables designers and inspection bodies to rigorously assess protection adequacy and selectivity in complex, multi-source DC architectures.
 
-\begin{figure*}[t]
+\begin{figure}[t]
     \centering
-    \includegraphics[width=0.85\textwidth]{figures/DC_Topologies_cropped (1).pdf}
-    \caption{Schematic of the 800~V DC datacenter subsystem showing the 4-to-make-3 redundancy configuration with AC/DC infeed and optional battery back-up at each distribution panel.}
+    \includegraphics[width=\linewidth]{figures/DC_Topologies_cropped (1).pdf}
+    \caption{800~V DC datacenter subsystem: 4-to-make-3 redundancy with AC/DC infeed and optional battery back-up per distribution panel.}
     \label{fig:system_architecture}
-\end{figure*}
+\end{figure}
 
 \section{Methodology}
 
@@ -81,7 +81,7 @@ From each simulated waveform the method extracts: (1)~peak prospective current $
 \begin{enumerate}
     \item \textbf{Interruption capability} --- $I_\mathrm{peak} \leq I_\mathrm{cu}$: the prospective peak current must not exceed the rated breaking capacity of the protection device.
     \item \textbf{Speed of operation} --- the device must clear the fault before the bus voltage drops below the ride-through threshold (e.g.\ $0.8 \times V_\mathrm{nom}$), preserving compute continuity on healthy feeders.
-    \item \textbf{Selective coordination} --- the device closest to the fault must trip first; upstream devices act as backup only if the downstream device fails to clear.
+    \item \textbf{Selective coordination} --- the device closest to the fault must trip first, both with respect to upstream devices (which act as backup) and parallel branch devices (which must remain closed to preserve healthy feeders).
 \end{enumerate}
 
 \section{Case Study: 800~V DC Datacenter}
@@ -109,11 +109,7 @@ A bolted short-circuit fault is applied at the close-in terminals of protection 
     \label{fig:simulation_results}
 \end{figure}
 
-\textbf{Interruption capability.} The prospective peak current of 96.1~kA (Fig.~\ref{fig:fault_start_current}) defines the minimum required breaking capacity $I_\mathrm{cu}$ for Q-12. Because both the AC/DC solid-state transformer and the DC/DC converter are non-fault-blocking, the peak current is driven by the discharge of their output filter capacitors combined with the continued current feed from the converters. A conventional molded-case circuit breaker rated at 10~kA would be inadequate; a solid-state circuit breaker (SSCB) with sufficient $I_\mathrm{cu}$ is required.
-
-\textbf{Speed of operation.} The bus voltage drops below the 80\% ride-through threshold within 0.075~ms of fault inception (Fig.~\ref{fig:fault_start_voltage}). This leaves an extremely narrow window for fault detection and interruption before adjacent, healthy rack rows experience a voltage sag that may trigger compute errors. Protection devices with sub-millisecond detection and clearing times---characteristic of SSCBs---are therefore essential at this protection level.
-
-\textbf{Selective coordination.} Q-12 must be the only protection device clearing fault, before any upstream device or peer device trips. The simulation provides the time-current trajectory needed to verify that Q-12's operating characteristic lies entirely below the upstream device's curve for the computed fault current range, ensuring that only the faulted feeder is disconnected.
+The prospective peak current of 96.1~kA (Fig.~\ref{fig:fault_start_current}), driven by capacitor discharge from non-fault-blocking converters, sets the minimum $I_\mathrm{cu}$ requirement for the protection device. Simultaneously, the bus voltage crosses the 80\% ride-through threshold only 0.075~ms after fault inception (Fig.~\ref{fig:fault_start_voltage}), requiring sub-millisecond detection and clearing to preserve compute continuity on healthy feeders. Finally, the simulated time-current trajectories allow verification that Q-12 trips before any upstream or peer device, ensuring selective coordination.
 
 \section{Conclusion}
 
