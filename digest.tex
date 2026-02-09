@@ -54,8 +54,8 @@ DC microgrids, short-circuit protection, solid-state circuit breakers, data cent
 
 \begin{figure*}[t]
     \centering
-    \includegraphics[width=0.85\textwidth]{figures/DC_Topologies_cropped.pdf}
-    \caption{Schematic of the 800~V DC datacenter subsystem showing the 4-to-make-3 redundancy configuration with AC/DC infeed and battery back-up at each distribution panel.}
+    \includegraphics[width=0.85\textwidth]{figures/DC_Topologies_cropped (1).pdf}
+    \caption{Schematic of the 800~V DC datacenter subsystem showing the 4-to-make-3 redundancy configuration with AC/DC infeed and optional battery back-up at each distribution panel.}
     \label{fig:system_architecture}
 \end{figure*}
 
@@ -68,7 +68,7 @@ DC microgrids, short-circuit protection, solid-state circuit breakers, data cent
 %     \label{fig:methodology}
 % \end{figure}
 
-The methodology structures protection evaluation around the engineering questions that map directly to device requirements. It extends the principles of IEC~61660~\cite{iec61660} to converter-dominated topologies by replacing the standard's per-source analytical envelopes with a unified time-domain simulation that captures multi-source interactions, converter behavior, and bus voltage dynamics.
+The methodology structures protection evaluation around engineering questions that directly relate to device requirements. It extends the principles of IEC~61660~\cite{iec61660} to converter-dominated topologies by replacing the standard's per-source analytical envelopes with a unified time-domain simulation that captures multi-source interactions, converter behavior, and DC bus voltage dynamics.
 
 \subsection{Component Modeling}
 Each source is represented by a transient-capable model parameterized from standard engineering specifications (datasheets and cable tables). Batteries are modeled as a voltage source behind an internal impedance; AC/DC rectifiers contribute a capacitor-discharge transient followed by a current-limited steady-state feed; DC/DC converters are classified as either \emph{fault-blocking} (ceasing current injection upon detecting a downstream fault) or \emph{non-fault-blocking} (continuing to feed fault current). This classification is critical: a non-isolated DC/DC converter connecting a battery bank may allow the battery to contribute additional short-circuit current through the converter's freewheeling path. Cables are modeled as series $RL$ impedances.
@@ -86,7 +86,7 @@ From each simulated waveform the method extracts: (1)~peak prospective current $
 
 \section{Case Study: 800~V DC Datacenter}
 
-The methodology is applied to an 800~V DC subsystem representative of next-generation AI data center architectures (Fig.~\ref{fig:system_architecture}). The topology follows a \emph{4-to-make-3} redundancy scheme: four 3~MW AC/DC rectifiers feed a common 800~V DC bus, where any three can sustain the full load if one fails. Each 1~MW server rack row is supplied from a distribution panel via a 20~m feeder. At each distribution panel, two independent fault-current sources are present: the AC/DC infeed and a battery storage unit connected through a DC/DC converter. Branch feeders of 20~m connect the distribution panels to individual rack rows.
+The methodology is applied to an 800~V DC subsystem representative of next-generation AI data center architectures (Fig.~\ref{fig:system_architecture}). The topology follows a \emph{4-to-make-3} redundancy scheme: four 3~MW MVAC/LVDC rectifiers  feed a common 800~V DC bus, where any three can sustain the full load if one fails. Each 1~MW server rack row is supplied from a distribution panel via a 20~m feeder. At each distribution panel, two independent fault-current sources are present: the AC/DC infeed and a battery storage unit connected through a DC/DC converter. Branch feeders of 20~m connect the distribution panels to individual rack rows. The feeder length is a parameter that can be simply adjusted for the particular data center layout.
 
 A bolted short-circuit fault is applied at the close-in terminals of protection device Q-12 (start of the feeder to a rack row). Fig.~\ref{fig:simulation_results} shows the resulting transients.
 
@@ -113,11 +113,11 @@ A bolted short-circuit fault is applied at the close-in terminals of protection 
 
 \textbf{Speed of operation.} The bus voltage drops below the 80\% ride-through threshold within 0.7~ms of fault inception (Fig.~\ref{fig:fault_start_voltage}). This leaves an extremely narrow window for fault detection and interruption before adjacent, healthy rack rows experience a voltage sag that may trigger compute errors. Protection devices with sub-millisecond detection and clearing times---characteristic of SSCBs---are therefore essential at this protection level.
 
-\textbf{Selective coordination.} Q-12 must clear the fault before any upstream device (e.g.\ the main bus-tie breaker) trips. The simulation provides the time-current trajectory needed to verify that Q-12's operating characteristic lies entirely below the upstream device's curve for the computed fault current range, ensuring that only the faulted feeder is disconnected.
+\textbf{Selective coordination.} Q-12 must be the only protection device clearing fault, before any upstream device or peer device trips. The simulation provides the time-current trajectory needed to verify that Q-12's operating characteristic lies entirely below the upstream device's curve for the computed fault current range, ensuring that only the faulted feeder is disconnected.
 
 \section{Conclusion}
 
-The widespread industry interest in high-power DC distribution for data centers necessitates a practical methodology for designing robust short-circuit protection. This paper addresses this gap by presenting a simulation-based workflow tailored for converter-dominated, multi-source DC architectures. The case study demonstrated that, with fault-blocking converters, peak fault currents are driven by capacitor discharge and can reach tens of kiloamperes within roughly one millisecond---demanding sub-millisecond detection and clearing to prevent bus voltage collapse. By focusing on the three pillars of protection design---interruption capability, speed of operation, and selective coordination---the methodology provides a scalable framework for next-generation 800~V protection system design.
+The widespread interest of the industry in high-power DC distribution for data centers requires a practical methodology to design robust short-circuit protection. This paper addresses this gap by presenting a simulation-based workflow tailored for converter-dominated, multi-source DC architectures. The case study demonstrated that, with fault-blocking converters, peak fault currents are driven by capacitor discharge and can reach tens of kiloamperes within roughly one millisecond---demanding sub-millisecond detection and clearing to prevent bus voltage collapse. By focusing on the three pillars of protection design---interruption capability, speed of operation, and selective coordination---the methodology provides a scalable framework for next-generation 800~V protection system design.
 
 This digest established the core principles; the full paper will detail the component models, apply the methodology to the 800~V reference design, and disclose extensive laboratory validation results.
 
